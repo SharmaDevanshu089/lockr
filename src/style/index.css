@@ -5,6 +5,9 @@
   font-weight: bolder;
   font-style: normal;
 }
+button{
+  cursor: pointer !important;
+}
 @font-face {
   font-family: "sens";
   src: url("/asset/sansation.ttf") format("truetype");
@@ -25,6 +28,7 @@
 }
 html {
   scrollbar-width: none;
+  cursor: default;
 }
 #overlay {
   position: fixed;
@@ -36,4 +40,5 @@ html {
   backdrop-filter: blur(5px); /* adds blur */
   display: none; /* hidden initially */
   z-index: 9999; /* stay above everything */
+  cursor: not-allowed;
 }
