@@ -1,0 +1,39 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/versions/bulma-no-dark-mode.min.css";
+@font-face {
+  font-family: "Roboto";
+  src: url("/asset/roboto.ttf") format("truetype");
+  font-weight: bolder;
+  font-style: normal;
+}
+@font-face {
+  font-family: "sens";
+  src: url("/asset/sansation.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  font-family: sens;
+}
+@media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background-color: #ffffff !important;
+    color: #313131 !important;
+  }
+::-webkit-scrollbar {
+  display: none;
+}
+html {
+  scrollbar-width: none;
+}
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.3); /* white with transparency */
+  backdrop-filter: blur(5px); /* adds blur */
+  display: none; /* hidden initially */
+  z-index: 9999; /* stay above everything */
+}
