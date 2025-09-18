@@ -1,4 +1,4 @@
-@import "https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/versions/bulma-no-dark-mode.min.css";
+@import "bulma.css";
 @font-face {
   font-family: "Roboto";
   src: url("/asset/roboto.ttf") format("truetype");
