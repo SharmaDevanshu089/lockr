@@ -6,11 +6,12 @@
   "build": {
     "frontendDist": "../src"
   },
+
   "app": {
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "LOCKR : Encript your file",
+        "title": "LOCKR : Encrypt your file",
         "width": 800,
         "height": 600
       }
