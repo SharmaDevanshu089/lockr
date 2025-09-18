@@ -1,4 +1,6 @@
+let invoke = window.__TAURI__.core.invoke;
 let username;
+
 username = "$USERNAME";
 const overlay = document.getElementById("overlay");
 document.getElementById("username").innerText = username;
