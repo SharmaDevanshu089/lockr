@@ -25,4 +25,9 @@ async function get_file() {
   });
   blurfocus();
   console.log(file_to_open);
+  invoke("get_file_path_in_rust", { path: file_to_open });
+  bluroff();
+}
+function bluroff() {
+  overlay.style.display = "none";
 }
