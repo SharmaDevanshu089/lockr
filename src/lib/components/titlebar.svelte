@@ -7,16 +7,26 @@
     console.log("Close Initiated");
     getCurrentWindow().close();
   }
+  function addBorder() {
+    document.getElementById("navbar")?.classList.add('shadow-xl');
+    document.getElementById("navbar")?.classList.remove('shadow-xs');
+  }
+  function removerBorder() {
+    document.getElementById("navbar")?.classList.remove('shadow-xl')
+  }
 </script>
 
 <Toolbar.Root
-  class="flex h-14 w-full items-center border-b bg-background px-4 cursor-grab active:cursor-grabbing "
+id = "navbar"
+  class="flex h-18 w-full items-center px-4 cursor-grab active:cursor-grabbing transition duration-300 shadow-xs"
   data-tauri-drag-region
+  onmouseover={() => addBorder()}
+  onmouseleave={() => removerBorder()}
 >
   <div class="flex-1"></div>
 
   <div class="shrink-0">
-    <span class="text-x font-semibold text-foreground">Lockr</span>
+    <span class="text-4xl font-semibold text-foreground">Lockr</span>
   </div>
 
   <div class="flex flex-1 justify-end">
