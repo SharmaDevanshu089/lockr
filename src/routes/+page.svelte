@@ -2,13 +2,58 @@
   import { Lock, Key } from "lucide-svelte";
 
   let hovered: 'encrypt' | 'decrypt' | null = null;
+  let isExpanded = false;
+  let isDecryptedExpanded = false;
+function handleDecryptClick() {
+    const el = document.getElementById("decrypt");
+    if (!el || isDecryptedExpanded) return;
+    isDecryptedExpanded = true;
 
+    const rect = el.getBoundingClientRect();
+
+    // fix the card's position and size
+    el.style.position = "fixed";
+    el.style.top = rect.top + "px";
+    el.style.left = rect.left + "px";
+    el.style.width = rect.width + "px";
+    el.style.height = rect.height + "px";
+    el.style.zIndex = "1000";
+    el.style.transition = "all 0.5s ease";
+
+    // expand to full screen next tick
+    requestAnimationFrame(() => {
+      el.style.top = "0";
+      el.style.left = "0";
+      el.style.width = "100vw";
+      el.style.height = "100vh";
+    });
+
+    console.log("Decrypt clicked!");
+}
   function handleEncryptClick() {
-    console.log('Encrypt clicked!');
-  }
+      const el = document.getElementById("encrypt");
+  if (!el || isExpanded) return;
+  isExpanded = true;
 
-  function handleDecryptClick() {
-    console.log('Decrypt clicked!');
+  const rect = el.getBoundingClientRect();
+
+  // fix the card's position and size
+  el.style.position = "fixed";
+  el.style.top = rect.top + "px";
+  el.style.left = rect.left + "px";
+  el.style.width = rect.width + "px";
+  el.style.height = rect.height + "px";
+  el.style.zIndex = "1000";
+  el.style.transition = "all 0.5s ease";
+
+  // expand to full screen next tick
+  requestAnimationFrame(() => {
+    el.style.top = "0";
+    el.style.left = "0";
+    el.style.width = "100vw";
+    el.style.height = "100vh";
+  });
+    console.log('Encrypt clicked!');
   }
 
   // spotlight cursor effect
@@ -33,6 +78,7 @@
   <div class="relative z-10 grid min-h-[calc(100vh-8rem)] grid-cols-1 gap-8 p-10 md:grid-cols-2">
     <!-- Encrypt Panel -->
     <div
+      id="encrypt"
       role="button"
       tabindex="0"
       class="group relative flex h-full cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
@@ -49,12 +95,13 @@
 
       <!-- subtle glow -->
       <div
-        class="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-blue-500/20 to-cyan-400/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
+        class="absolute -inset-0.5 rounded-3xl bg-linear-to-r from-blue-500/20 to-cyan-400/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
       ></div>
     </div>
 
     <!-- Decrypt Panel -->
     <div
+      id="decrypt"
       role="button"
       tabindex="0"
       class="group relative flex h-full cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
@@ -70,7 +117,7 @@
       </div>
 
       <div
-        class="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-cyan-400/20 to-blue-500/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
+        class="absolute -inset-0.5 rounded-3xl bg-linear-to-r from-cyan-400/20 to-blue-500/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
       ></div>
     </div>
   </div>
