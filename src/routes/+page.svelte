@@ -19,26 +19,27 @@
   }
 </script>
 
-<!-- Background with reactive spotlight -->
-<div
-  class="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#0a0a0a] via-[#111] to-[#191919] text-white"
-  on:mousemove={updateSpotlight}
->
+<svelte:window on:mousemove={updateSpotlight} />
+
+<div class="relative w-full overflow-hidden bg-[#020618] text-white">
+
+  <!-- spotlight overlay -->
   <div
-    class="absolute inset-0 transition-all duration-300"
+    class="absolute inset-0 transition-all duration-300 pointer-events-none"
     style="background: radial-gradient(400px circle at var(--x, 50%) var(--y, 50%), rgba(100, 200, 255, 0.12), transparent 40%);"
   ></div>
 
-  <div class="relative z-10 grid h-full grid-cols-1 gap-8 p-10 md:grid-cols-2">
+  <!-- card grid -->
+  <div class="relative z-10 grid min-h-[calc(100vh-8rem)] grid-cols-1 gap-8 p-10 md:grid-cols-2">
     <!-- Encrypt Panel -->
     <div
       role="button"
       tabindex="0"
-      class="group relative flex h-[60vh] cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
+      class="group relative flex h-full cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
       on:mouseenter={() => (hovered = 'encrypt')}
       on:mouseleave={() => (hovered = null)}
       on:click={handleEncryptClick}
-      on:keydown={(e) => e.key === 'Enter' && handleEncryptClick()}
+      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleEncryptClick()}
     >
       <div class="text-center transition-all duration-500" class:opacity-80={hovered === 'decrypt'}>
         <Lock class="mx-auto h-24 w-24 text-primary transition-all duration-500 group-hover:scale-110" />
@@ -56,11 +57,11 @@
     <div
       role="button"
       tabindex="0"
-      class="group relative flex h-[60vh] cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
+      class="group relative flex h-full cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
       on:mouseenter={() => (hovered = 'decrypt')}
       on:mouseleave={() => (hovered = null)}
       on:click={handleDecryptClick}
-      on:keydown={(e) => e.key === 'Enter' && handleDecryptClick()}
+      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleDecryptClick()}
     >
       <div class="text-center transition-all duration-500" class:opacity-80={hovered === 'encrypt'}>
         <Key class="mx-auto h-24 w-24 text-primary transition-all duration-500 group-hover:scale-110" />

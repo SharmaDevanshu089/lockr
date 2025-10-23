@@ -8,7 +8,7 @@
   - h-full (makes it fill the space)
   - gap-6 / p-6 (gives the cards space)
 -->
-<div class="grid h-full grid-cols-1 gap-6 p-6 md:grid-cols-2">
+<div class="grid h-full grid-cols-1 gap-6 p-6 md:grid-cols-2 dark">
   <!-- 
     1. WRAP THE CARD IN AN <a> TAG
        This makes it a link to the new page.

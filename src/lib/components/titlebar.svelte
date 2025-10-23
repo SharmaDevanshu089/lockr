@@ -23,17 +23,18 @@ id = "navbar"
   onmouseover={() => addBorder()}
   onmouseleave={() => removerBorder()}
 >
-  <div class="flex-1"></div>
+  <div class="flex-1" data-tauri-drag-region></div>
 
   <div class="shrink-0">
-    <span class="text-4xl font-semibold text-foreground">Lockr</span>
+    <span class="text-4xl font-semibold text-foreground" data-tauri-drag-region>Lockr</span>
   </div>
 
-  <div class="flex flex-1 justify-end">
+  <div class="flex flex-1 justify-end" data-tauri-drag-region>
     <button
-      class="inline-flex h-9 w-9 items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      class="close inline-flex h-9 w-9 items-center justify-center rounded-xl p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:border-accent"
       aria-label="Close"
       onclick={() => appclose()}
+      data-tauri-drag-region
     >
       <X class="h-5 w-5" />
     </button>
