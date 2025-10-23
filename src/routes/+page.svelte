@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Lock, Key } from "lucide-svelte";
+  import { goto } from '$app/navigation';
 
   let hovered: 'encrypt' | 'decrypt' | null = null;
   let isExpanded = false;
@@ -29,6 +30,9 @@ function handleDecryptClick() {
     });
 
     console.log("Decrypt clicked!");
+      setTimeout(() => {
+    goto('/decrypt'); // your new route
+  }, 500);
 }
   function handleEncryptClick() {
       const el = document.getElementById("encrypt");
@@ -54,6 +58,9 @@ function handleDecryptClick() {
     el.style.height = "100vh";
   });
     console.log('Encrypt clicked!');
+      setTimeout(() => {
+    goto('/encrypt'); // your new route
+  }, 500);
   }
 
   // spotlight cursor effect
