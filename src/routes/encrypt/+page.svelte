@@ -1,61 +1,86 @@
 <script lang="ts">
-  import { Lock, Key } from "lucide-svelte";
-  // We don't need the click handlers, the <a> tags handle navigation
+  import { FolderLock, FileLock2 } from "lucide-svelte";
+
+  let hovered: 'encrypt' | 'decrypt' | null = null;
+
+function handleDecryptClick() {
+   
+    console.log("Folder clicked!");
+}
+  function handleEncryptClick() {
+  
+    console.log('File clicked!');}
+
+  // spotlight cursor effect
+  function updateSpotlight(e: MouseEvent) {
+    const root = document.documentElement;
+    root.style.setProperty('--x', `${e.clientX}px`);
+    root.style.setProperty('--y', `${e.clientY}px`);
+  }
 </script>
 
-<!-- 
-  This grid fills the <main> tag from your layout.
-  - h-full (makes it fill the space)
-  - gap-6 / p-6 (gives the cards space)
--->
-<div class="grid h-full grid-cols-1 gap-6 p-6 md:grid-cols-2 dark">
-  <!-- 
-    1. WRAP THE CARD IN AN <a> TAG
-       This makes it a link to the new page.
-  -->
-  <a
-    href="/encrypt"
-    data-sveltekit-noscroll
-    class="h-full w-full"
-  >
-    <!-- 
-      2. ADD THE view-transition-name
-         This MUST match the name on the encrypt/+page.svelte
-    -->
-    <button
-      class="group flex h-full w-full flex-col items-center justify-center rounded-xl border bg-card p-10 text-card-foreground shadow-lg transition-all duration-300 hover:scale-[1.03] hover:bg-accent hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      style="view-transition-name: main-card;"
-    >
-      <Lock
-        class="h-24 w-24 text-muted-foreground transition-all duration-300 group-hover:scale-110 group-hover:text-primary"
-      />
-      <h2 class="mt-6 text-5xl font-extrabold text-foreground">Encrypt</h2>
-      <p class="mt-2 text-lg text-muted-foreground">
-        Secure your files with a password.
-      </p>
-    </button>
-  </a>
+<svelte:window on:mousemove={updateSpotlight} />
 
-  <!-- 
-    3. DO THE SAME FOR THE DECRYPT CARD
-       (You'll need to create /decrypt/+page.svelte later)
-  -->
-  <a
-    href="/decrypt"
-    data-sveltekit-noscroll
-    class="h-full w-full"
-  >
-    <button
-      class="group flex h-full w-full flex-col items-center justify-center rounded-xl border bg-card p-10 text-card-foreground shadow-lg transition-all duration-300 hover:scale-[1.03] hover:bg-accent hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      style="view-transition-name: decrypt-card;"
+<div class="relative w-full overflow-hidden bg-[#020618] text-white">
+
+  <!-- spotlight overlay -->
+  <div
+    class="absolute inset-0 transition-all duration-300 pointer-events-none"
+    style="background: radial-gradient(400px circle at var(--x, 50%) var(--y, 50%), rgba(100, 200, 255, 0.12), transparent 40%);"
+  ></div>
+
+  <!-- card grid -->
+  <div class="relative z-10 grid min-h-[calc(100vh-8rem)] grid-cols-1 gap-8 p-10 md:grid-cols-2">
+    <!-- Encrypt Panel -->
+    <div
+      id="encrypt"
+      role="button"
+      tabindex="0"
+      class="group relative flex h-full cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
+      on:mouseenter={() => (hovered = 'encrypt')}
+      on:mouseleave={() => (hovered = null)}
+      on:click={handleEncryptClick}
+      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleEncryptClick()}
     >
-      <Key
-        class="h-24 w-24 text-muted-foreground transition-all duration-300 group-hover:scale-110 group-hover:text-primary"
-      />
-      <h2 class="mt-6 text-5xl font-extrabold text-foreground">Decrypt</h2>
-      <p class="mt-2 text-lg text-muted-foreground">
-        Unlock your secured files.
-      </p>
-    </button>
-  </a>
+      <div class="text-center transition-all duration-500" class:opacity-80={hovered === 'decrypt'}>
+        <FileLock2 class="mx-auto h-24 w-24 text-primary transition-all duration-500 group-hover:scale-110" />
+        <h2 class="mt-6 text-5xl font-extrabold">File</h2>
+        <p class="mt-3 text-lg text-gray-300">Encript a File.</p>
+      </div>
+
+      <!-- subtle glow -->
+      <div
+        class="absolute -inset-0.5 rounded-3xl bg-linear-to-r from-blue-500/20 to-cyan-400/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
+      ></div>
+    </div>
+
+    <!-- Decrypt Panel -->
+    <div
+      id="decrypt"
+      role="button"
+      tabindex="0"
+      class="group relative flex h-full cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
+      on:mouseenter={() => (hovered = 'decrypt')}
+      on:mouseleave={() => (hovered = null)}
+      on:click={handleDecryptClick}
+      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleDecryptClick()}
+    >
+      <div class="text-center transition-all duration-500" class:opacity-80={hovered === 'encrypt'}>
+        <FolderLock class="mx-auto h-24 w-24 text-primary transition-all duration-500 group-hover:scale-110" />
+        <h2 class="mt-6 text-5xl font-extrabold">Folder</h2>
+        <p class="mt-3 text-lg text-gray-300">Encript a Folder.</p>
+      </div>
+
+      <div
+        class="absolute -inset-0.5 rounded-3xl bg-linear-to-r from-cyan-400/20 to-blue-500/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
+      ></div>
+    </div>
+  </div>
 </div>
+
+<style>
+  :root {
+    --x: 50%;
+    --y: 50%;
+  }
+</style>
