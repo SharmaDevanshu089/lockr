@@ -1,17 +1,14 @@
 <script lang="ts">
   import { FolderLock, FileLock2 } from "lucide-svelte";
-
+  import { invoke } from '@tauri-apps/api/core';
   let hovered: 'encrypt' | 'decrypt' | null = null;
-
 function handleDecryptClick() {
-   
     console.log("Folder clicked!");
 }
-  function handleEncryptClick() {
-  
-    console.log('File clicked!');}
-
-  // spotlight cursor effect
+  function intiateFile() {
+    console.log('File clicked!');
+    invoke('getFilePath');
+  }
   function updateSpotlight(e: MouseEvent) {
     const root = document.documentElement;
     root.style.setProperty('--x', `${e.clientX}px`);
@@ -39,8 +36,8 @@ function handleDecryptClick() {
       class="group relative flex h-full cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
       on:mouseenter={() => (hovered = 'encrypt')}
       on:mouseleave={() => (hovered = null)}
-      on:click={handleEncryptClick}
-      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleEncryptClick()}
+      on:click={intiateFile}
+      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && intiateFile()}
     >
       <div class="text-center transition-all duration-500" class:opacity-80={hovered === 'decrypt'}>
         <FileLock2 class="mx-auto h-24 w-24 text-primary transition-all duration-500 group-hover:scale-110" />

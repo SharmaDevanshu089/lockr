@@ -17,6 +17,12 @@ body {
   -ms-user-select: none;
   overflow: hidden;
 }
+*::-webkit-scrollbar {
+  display: none;
+}
+* {
+  scrollbar-width: none; /* Firefox */
+}
 /* 
 @custom-variant dark (&:is(.dark *));
 :root {

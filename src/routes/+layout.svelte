@@ -1,3 +1,7 @@
+<svelte:head>
+  <link rel="prefetch" href="/encrypt" />
+  <link rel="prefetch" href="/decrypt" />
+</svelte:head>
 <script lang="ts">
   import "../app.css";
   import Titlebar from "$lib/components/titlebar.svelte";
