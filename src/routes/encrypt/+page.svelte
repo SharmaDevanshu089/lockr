@@ -1,3 +1,4 @@
+<!-- just comment to check workflow -->
 <script lang="ts">
   import { FolderLock, FileLock2 } from "lucide-svelte";
   import { invoke } from '@tauri-apps/api/core';
