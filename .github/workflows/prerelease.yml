@@ -29,16 +29,21 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Build Tauri App
-        run: npm run tauri build
+        run: pnpm tauri build
 
-      - name: Upload app artifacts
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-${{ matrix.suffix }}
@@ -53,25 +58,29 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download all artifacts
+      - name: Download all builds
         uses: actions/download-artifact@v4
         with:
           path: builds
 
-      - name: Get current version
+      - name: Get latest tag
         id: ver
         run: |
-          ver=$(git tag --sort=-v:refname | grep '^v' | head -n 1 || echo "v0.1.0-pre0")
-          echo "version=$ver" >> $GITHUB_OUTPUT
+          latest=$(git tag --sort=-v:refname | grep '^v' | head -n 1 || echo "v0.1.0-pre0")
+          echo "latest=$latest" >> $GITHUB_OUTPUT
 
-      - name: Bump prerelease version
+      - name: Bump prerelease only
         id: bump
         run: |
-          old=${{ steps.ver.outputs.version }}
-          num=$(echo "$old" | grep -oE 'pre[0-9]+' | sed 's/pre//' || echo 0)
-          base=$(echo "$old" | sed 's/-pre[0-9]*//')
-          newnum=$((num + 1))
-          new="$base-pre$newnum"
+          old=${{ steps.ver.outputs.latest }}
+          if [[ "$old" == *"-pre"* ]]; then
+            num=$(echo "$old" | grep -oE 'pre[0-9]+' | sed 's/pre//' || echo 0)
+            base=$(echo "$old" | sed 's/-pre[0-9]*//')
+            newnum=$((num + 1))
+            new="$base-pre$newnum"
+          else
+            new="$old-pre1"
+          fi
           echo "new=$new" >> $GITHUB_OUTPUT
 
       - name: Create prerelease
