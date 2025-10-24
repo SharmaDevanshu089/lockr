@@ -1,0 +1,85 @@
+name: Tauri Auto Pre-Release
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  build:
+    if: contains(github.event.head_commit.message, 'pre-release') || contains(github.event.head_commit.message, 'build:')
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            suffix: linux
+          - os: macos-latest
+            suffix: macos
+          - os: windows-latest
+            suffix: windows.exe
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Tauri App
+        run: npm run tauri build
+
+      - name: Upload app artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.suffix }}
+          path: |
+            src-tauri/target/release/bundle/**/*.AppImage
+            src-tauri/target/release/bundle/**/*.deb
+            src-tauri/target/release/bundle/**/*.exe
+            src-tauri/target/release/bundle/**/*.dmg
+          if-no-files-found: ignore
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: builds
+
+      - name: Get current version
+        id: ver
+        run: |
+          ver=$(git tag --sort=-v:refname | grep '^v' | head -n 1 || echo "v0.1.0-pre0")
+          echo "version=$ver" >> $GITHUB_OUTPUT
+
+      - name: Bump prerelease version
+        id: bump
+        run: |
+          old=${{ steps.ver.outputs.version }}
+          num=$(echo "$old" | grep -oE 'pre[0-9]+' | sed 's/pre//' || echo 0)
+          base=$(echo "$old" | sed 's/-pre[0-9]*//')
+          newnum=$((num + 1))
+          new="$base-pre$newnum"
+          echo "new=$new" >> $GITHUB_OUTPUT
+
+      - name: Create prerelease
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.bump.outputs.new }}
+          name: "Prerelease ${{ steps.bump.outputs.new }}"
+          prerelease: true
+          files: builds/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
