@@ -34,6 +34,23 @@ jobs:
         run: cargo install tauri-cli --locked
 
       # --------------------------
+      # Cache Cargo
+      # --------------------------
+      - name: Cache Cargo registry
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: cargo-registry-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Cache Cargo target
+        uses: actions/cache@v3
+        with:
+          path: target
+          key: cargo-target-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+
+      # --------------------------
       # Setup Node & pnpm
       # --------------------------
       - name: Setup Node.js
@@ -47,8 +64,21 @@ jobs:
           version: 9
           run_install: false
 
+      # --------------------------
+      # Cache pnpm
+      # --------------------------
+      - name: Cache pnpm
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      # --------------------------
+      # Install frontend dependencies
+      # --------------------------
       - name: Install frontend dependencies
-        working-directory: ./src
+        # ⚠️ If your package.json is in ./src or ./frontend, change this path accordingly
+        working-directory: .
         run: pnpm install
 
       # --------------------------
