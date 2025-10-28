@@ -8,7 +8,7 @@ function handleDecryptClick() {
 }
   function intiateFile() {
     console.log('File clicked!');
-    invoke('getFilePath');
+    invoke('get_file_path');
   }
   function updateSpotlight(e: MouseEvent) {
     const root = document.documentElement;
