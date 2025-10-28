@@ -2,7 +2,7 @@
 
 Lockr is a next-generation, high-performance file encryption utility designed for top-level security, speed, and a seamless user experience. It merges the rock-solid performance of Rust for its memory-safe backend with Tauri’s lightweight, secure, cross-platform desktop capabilities. The modern SvelteKit frontend offers a reactive, glassmorphic UI that makes encryption a delight, not a chore.
 
-![Lockr UI Screenshot](<link_to_your_screenshot.png>)
+![Lockr UI Screenshot](<video.gif>)
 
 ---
 
