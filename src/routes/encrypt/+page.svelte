@@ -1,15 +1,57 @@
 <!-- just comment to check workflow -->
 <script lang="ts">
-  import { FolderLock, FileLock2 } from "lucide-svelte";
+  import { FolderLock, FileLock2, X } from "lucide-svelte";
   import { invoke } from '@tauri-apps/api/core';
+  import { open } from '@tauri-apps/plugin-dialog';
+
   let hovered: 'encrypt' | 'decrypt' | null = null;
-function handleDecryptClick() {
+  let showModal = false;
+  let selectedFilePath = '';
+  let modalType: 'file' | 'folder' | null = null;
+
+  function handleDecryptClick() {
     console.log("Folder clicked!");
-}
+    modalType = 'folder';
+    showModal = true;
+  }
+
   function intiateFile() {
     console.log('File clicked!');
-    invoke('get_file_path');
+    modalType = 'file';
+    showModal = true;
   }
+
+  async function browseFile() {
+    try {
+      const selected = await open({
+        multiple: false,
+        directory: modalType === 'folder'
+      });
+
+      if (selected) {
+        selectedFilePath = selected as string;
+      }
+    } catch (error) {
+      console.error('Error selecting file:', error);
+    }
+  }
+
+  function handleEncrypt() {
+    if (!selectedFilePath) return;
+
+    console.log(`Encrypting ${modalType}:`, selectedFilePath);
+    invoke('get_file_path', { path: selectedFilePath });
+
+    // Reset modal
+    closeModal();
+  }
+
+  function closeModal() {
+    showModal = false;
+    selectedFilePath = '';
+    modalType = null;
+  }
+
   function updateSpotlight(e: MouseEvent) {
     const root = document.documentElement;
     root.style.setProperty('--x', `${e.clientX}px`);
@@ -74,6 +116,77 @@ function handleDecryptClick() {
       ></div>
     </div>
   </div>
+
+  <!-- Modal -->
+  {#if showModal}
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+      on:click={closeModal}
+      role="button"
+      tabindex="0"
+      on:keydown={(e) => e.key === 'Escape' && closeModal()}
+    >
+      <div
+        class="relative w-full max-w-lg rounded-3xl border border-white/20 bg-[#020618]/95 p-8 shadow-2xl backdrop-blur-xl"
+        on:click|stopPropagation
+        role="dialog"
+        aria-modal="true"
+      >
+        <!-- Close Button -->
+        <button
+          class="absolute right-4 top-4 text-gray-400 transition-colors hover:text-white"
+          on:click={closeModal}
+          aria-label="Close modal"
+        >
+          <X class="h-6 w-6" />
+        </button>
+
+        <!-- Modal Header -->
+        <div class="mb-6 text-center">
+          {#if modalType === 'file'}
+            <FileLock2 class="mx-auto h-16 w-16 text-primary" />
+          {:else}
+            <FolderLock class="mx-auto h-16 w-16 text-primary" />
+          {/if}
+          <h3 class="mt-4 text-3xl font-bold">
+            Select {modalType === 'file' ? 'File' : 'Folder'}
+          </h3>
+          <p class="mt-2 text-gray-400">Choose a {modalType} to encrypt</p>
+        </div>
+
+        <!-- File Path Display -->
+        <div class="mb-6">
+          <label class="mb-2 block text-sm font-medium text-gray-300">
+            {modalType === 'file' ? 'File' : 'Folder'} Path
+          </label>
+          <div class="flex items-center gap-3">
+            <input
+              type="text"
+              value={selectedFilePath}
+              placeholder="No {modalType} selected"
+              readonly
+              class="flex-1 rounded-lg border border-white/20 bg-white/5 px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/50"
+            />
+            <button
+              on:click={browseFile}
+              class="rounded-lg border border-white/20 bg-white/10 px-6 py-3 font-semibold transition-all duration-300 hover:scale-105 hover:border-primary/40 hover:bg-white/20"
+            >
+              Browse
+            </button>
+          </div>
+        </div>
+
+        <!-- Encrypt Button -->
+        <button
+          on:click={handleEncrypt}
+          disabled={!selectedFilePath}
+          class="w-full rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 px-6 py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+        >
+          Encrypt {modalType === 'file' ? 'File' : 'Folder'}
+        </button>
+      </div>
+    </div>
+  {/if}
 </div>
 
 <style>
