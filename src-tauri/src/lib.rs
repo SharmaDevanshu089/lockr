@@ -42,13 +42,15 @@ fn open_file_dialog() -> String {
     // else {Ok(unfiltered_url)}
     return file_url_string;
 }
-fn encript_file_by_path(path_to_file: PathBuf) {}
+fn encript_file_by_path(path_to_file: PathBuf) {
+    println!("Loading {}", path_to_file.display());
+}
 
 #[tauri::command]
 fn open_folder_dialog() -> String {
     // I really do not have energy to deal with this
     // TODO:Add the proper error handling later on with the project
-    let file_url = FileDialog::new().pick_file().unwrap();
+    let file_url = FileDialog::new().pick_folder().unwrap();
     let file_url_string = file_url.to_string_lossy().into_owned();
     // let unfiltered_url = match  {
     //     Some(file_url_string) => file_url_string.to_string(),
