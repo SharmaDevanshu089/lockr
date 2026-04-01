@@ -2,7 +2,7 @@
 <script lang="ts">
   import { FolderLock, FileLock2, X } from "lucide-svelte";
   import { invoke } from '@tauri-apps/api/core';
-  import { open } from '@tauri-apps/plugin-dialog';
+  // import { open } from '@tauri-apps/plugin-dialog';
   // import {gsap} from 'gsap';
 
   // let tl = gsap.timeline();
@@ -11,13 +11,13 @@
   let selectedFilePath = '';
   let modalType: 'file' | 'folder' | null = null;
 
-  function handleDecryptClick() {
+  function initiateFolderSelection() {
     console.log("Folder clicked!");
     modalType = 'folder';
     showModal = true;
   }
 
-  function intiateFile() {
+  function initiateFileSelection() {
     console.log('File clicked!');
     modalType = 'file';
     showModal = true;
@@ -84,13 +84,13 @@
       class="group relative flex h-full cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
       on:mouseenter={() => (hovered = 'encrypt')}
       on:mouseleave={() => (hovered = null)}
-      on:click={intiateFile}
-      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && intiateFile()}
+      on:click={initiateFileSelection}
+      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && initiateFileSelection()}
     >
       <div class="text-center transition-all duration-500" class:opacity-80={hovered === 'decrypt'}>
         <FileLock2 class="mx-auto h-24 w-24 text-primary transition-all duration-500 group-hover:scale-110" />
         <h2 class="mt-6 text-5xl font-extrabold">File</h2>
-        <p class="mt-3 text-lg text-gray-300">Encript a File.</p>
+        <p class="mt-3 text-lg text-gray-300">Encrypt a File.</p>
       </div>
 
       <!-- subtle glow -->
@@ -99,7 +99,7 @@
       ></div>
     </div>
 
-    <!-- Decrypt Panel -->
+    <!-- Folder Panel -->
     <div
       id="decrypt"
       role="button"
@@ -107,13 +107,13 @@
       class="group relative flex h-full cursor-pointer items-center justify-center rounded-3xl border border-white/20 bg-white/10 p-10 shadow-2xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.03] hover:border-primary/40"
       on:mouseenter={() => (hovered = 'decrypt')}
       on:mouseleave={() => (hovered = null)}
-      on:click={handleDecryptClick}
-      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleDecryptClick()}
+      on:click={initiateFolderSelection}
+      on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && initiateFolderSelection()}
     >
       <div class="text-center transition-all duration-500" class:opacity-80={hovered === 'encrypt'}>
         <FolderLock class="mx-auto h-24 w-24 text-primary transition-all duration-500 group-hover:scale-110" />
         <h2 class="mt-6 text-5xl font-extrabold">Folder</h2>
-        <p class="mt-3 text-lg text-gray-300">Encript a Folder.</p>
+        <p class="mt-3 text-lg text-gray-300">Encrypt a Folder.</p>
       </div>
 
       <div
