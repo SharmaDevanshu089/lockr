@@ -3,7 +3,9 @@
   import { FolderLock, FileLock2, X } from "lucide-svelte";
   import { invoke } from '@tauri-apps/api/core';
   import { open } from '@tauri-apps/plugin-dialog';
+  // import {gsap} from 'gsap';
 
+  // let tl = gsap.timeline();
   let hovered: 'encrypt' | 'decrypt' | null = null;
   let showModal = false;
   let selectedFilePath = '';
@@ -19,14 +21,17 @@
     console.log('File clicked!');
     modalType = 'file';
     showModal = true;
+    // tl.from("#modal",{ x: +500});
   }
 
   async function browseFile() {
     try {
-      const selected = await open({
-        multiple: false,
-        directory: modalType === 'folder'
-      });
+      // const selected = await open({
+      //   multiple: false,
+      //   directory: modalType === 'folder'
+      // });
+      const selected = await invoke("open_file_dialog");
+
 
       if (selected) {
         selectedFilePath = selected as string;
@@ -130,6 +135,7 @@
         class="relative w-full max-w-lg rounded-3xl border border-white/20 bg-[#020618]/95 p-8 shadow-2xl backdrop-blur-xl"
         on:click|stopPropagation
         role="dialog"
+        id="modal"
         aria-modal="true"
       >
         <!-- Close Button -->
