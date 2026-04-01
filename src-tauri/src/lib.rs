@@ -43,18 +43,26 @@ fn open_file_dialog() -> String {
     return file_url_string;
 }
 fn encript_file_by_path(path_to_file: PathBuf) {
-    let file = fs::read(path_to_file).unwrap();
+    let file = fs::read(&path_to_file).unwrap();
     let mut key_bytes = [0u8; 32];
     rand::thread_rng().fill_bytes(&mut key_bytes);
 
     let key = Key::<Aes256Gcm>::from_slice(&key_bytes);
+    println!("Key generated: {:?}", key);
     let cipher = Aes256Gcm::new(key);
-
     let mut nonce_bytes = [0u8; 12];
     rand::thread_rng().fill_bytes(&mut nonce_bytes);
     let nonce = Nonce::from_slice(&nonce_bytes);
     let ciphertext = cipher.encrypt(nonce, file.as_ref()).unwrap();
     println!("encrypted: {:?}", ciphertext);
+    let mut output = Vec::new();
+    output.extend_from_slice(&nonce_bytes);
+    output.extend_from_slice(&ciphertext);
+    let mut path_to_write = &mut path_to_file.clone();
+    path_to_write.set_extension("bin");
+    let path_to_write_string = path_to_write.to_string_lossy().into_owned();
+    println!("Path to write: {:?}", path_to_write_string);
+    std::fs::write(&path_to_write, output).unwrap();
 }
 
 #[tauri::command]
