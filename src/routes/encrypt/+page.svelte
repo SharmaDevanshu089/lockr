@@ -186,7 +186,7 @@
           <div class="flex items-center gap-3">
             <input
               type="text"
-              value={modalType === 'file' ? 'selectedFilePath' : 'selectedFolderPath'}
+              value={modalType === 'file' ? selectedFilePath :selectedFolderPath}
               placeholder="No {modalType} selected"
               readonly
               class="flex-1 rounded-lg border border-white/20 bg-white/5 px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/50"

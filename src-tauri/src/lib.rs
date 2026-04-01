@@ -1,17 +1,17 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use std::fs;
+use aes_gcm::aead::{Aead, KeyInit};
+use aes_gcm::{Aes256Gcm, Key, Nonce};
+use rand::RngCore;
 use rfd::FileDialog;
+use std::fs::{read, File};
+mod encrypt;
 //use std::path::Path;
 use std::path::PathBuf;
-#[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog])
+        .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog,get_file_path])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -43,7 +43,18 @@ fn open_file_dialog() -> String {
     return file_url_string;
 }
 fn encript_file_by_path(path_to_file: PathBuf) {
-    println!("Loading {}", path_to_file.display());
+    let file = fs::read(path_to_file).unwrap();
+    let mut key_bytes = [0u8; 32];
+    rand::thread_rng().fill_bytes(&mut key_bytes);
+
+    let key = Key::<Aes256Gcm>::from_slice(&key_bytes);
+    let cipher = Aes256Gcm::new(key);
+
+    let mut nonce_bytes = [0u8; 12];
+    rand::thread_rng().fill_bytes(&mut nonce_bytes);
+    let nonce = Nonce::from_slice(&nonce_bytes);
+    let ciphertext = cipher.encrypt(nonce, file.as_ref()).unwrap();
+    println!("encrypted: {:?}", ciphertext);
 }
 
 #[tauri::command]
