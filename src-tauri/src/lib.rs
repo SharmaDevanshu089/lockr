@@ -53,6 +53,7 @@ fn encript_file_by_path(path_to_file: PathBuf) {
     let mut nonce_bytes = [0u8; 12];
     rand::thread_rng().fill_bytes(&mut nonce_bytes);
     let nonce = Nonce::from_slice(&nonce_bytes);
+    println!("Nonce generated: {:?}", nonce);
     let ciphertext = cipher.encrypt(nonce, file.as_ref()).unwrap();
     println!("encrypted: {:?}", ciphertext);
     let mut output = Vec::new();
@@ -63,6 +64,8 @@ fn encript_file_by_path(path_to_file: PathBuf) {
     let path_to_write_string = path_to_write.to_string_lossy().into_owned();
     println!("Path to write: {:?}", path_to_write_string);
     std::fs::write(&path_to_write, output).unwrap();
+//     Now i will remove file
+//     let delete_result = fs::remove_file(&path_to_write).unwrap();
 }
 
 #[tauri::command]
