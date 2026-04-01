@@ -48,7 +48,7 @@
       //   multiple: false,
       //   directory: modalType === 'folder'
       // });
-      const selected = await invoke("open_file_dialog");
+      const selected = await invoke("open_folder_dialog");
 
 
       if (selected) {
