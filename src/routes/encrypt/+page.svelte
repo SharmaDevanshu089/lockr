@@ -9,6 +9,7 @@
   let hovered: 'encrypt' | 'decrypt' | null = null;
   let showModal = false;
   let selectedFilePath = '';
+  let selectedFolderPath = '';
   let modalType: 'file' | 'folder' | null = null;
 
   function initiateFolderSelection() {
@@ -38,6 +39,23 @@
       }
     } catch (error) {
       console.error('Error selecting file:', error);
+    }
+  }
+
+  async function browseFolder() {
+    try {
+      // const selected = await open({
+      //   multiple: false,
+      //   directory: modalType === 'folder'
+      // });
+      const selected = await invoke("open_file_dialog");
+
+
+      if (selected) {
+        selectedFolderPath = selected as string;
+      }
+    } catch (error) {
+      console.error('Error selecting folder:', error);
     }
   }
 
@@ -168,13 +186,13 @@
           <div class="flex items-center gap-3">
             <input
               type="text"
-              value={selectedFilePath}
+              value={modalType === 'file' ? 'selectedFilePath' : 'selectedFolderPath'}
               placeholder="No {modalType} selected"
               readonly
               class="flex-1 rounded-lg border border-white/20 bg-white/5 px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
             <button
-              on:click={browseFile}
+              on:click={modalType === 'file' ? browseFile : browseFolder}
               class="rounded-lg border border-white/20 bg-white/10 px-6 py-3 font-semibold transition-all duration-300 hover:scale-105 hover:border-primary/40 hover:bg-white/20"
             >
               Browse
