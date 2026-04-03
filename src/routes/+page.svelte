@@ -19,7 +19,7 @@
 <div class="relative w-full overflow-hidden text-primary bg-background">
   <!-- card grid -->
 <div class="relative z-10 min-h-[calc(100vh-8rem)] p-4">
-    <Breadcrumb aria-label="Solid background breadcrumb example" >
+    <Breadcrumb aria-label="Solid background breadcrumb example">
       <BreadcrumbItem href="/" home>Home</BreadcrumbItem>
     </Breadcrumb>
   <Heading tag="h2" class="center mb-4 pt-6">Encrypt your <span class="blue"> files and folders.</span></Heading>
