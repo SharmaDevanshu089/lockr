@@ -60,8 +60,130 @@
     cursor: default;
 }
 
+:root {
+    --accent-color: #0078D4; /* WinUI accent blue */
+    --control-fill-color-default: rgba(255,255,255,0.06);
+    --control-fill-color-secondary: rgba(255,255,255,0.12);
+    --control-border-color-default: rgba(255,255,255,0.08);
+    --control-border-color-hover: rgba(255,255,255,0.16);
+    --text-primary: #E6E7E8;
+    --text-secondary: #A8ADB3;
+}
 
-body {
+.winui-filebox {
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--control-fill-color-default);
+    border: 1px solid var(--control-border-color-default);
+    border-radius: 4px; /* WinUI default radius */
+    padding: 10px 20px;
+    margin: 10px;
+    font-family: "Segoe UI Variable", "Segoe Fluent", "Segoe UI", system-ui, sans-serif;
+    color: var(--text-primary);
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.winui-filebox:hover {
+    border-color: var(--control-border-color-hover);
+    background-color: var(--control-fill-color-secondary);
+}
+
+.winui-filebox input[type="text"] {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+.winui-filebox button {
+    background-color: var(--accent-color);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.winui-filebox button:hover {
+    background-color: #1083E8; /* hover accent */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.winui-filebox button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,120,212,0.65);
+}
+
+:root {
+    --checkbox-accent: #0078D4; /* WinUI accent blue */
+    --checkbox-fill-default: rgba(255,255,255,0.06);
+    --checkbox-fill-hover: rgba(255,255,255,0.12);
+    --checkbox-border-default: rgba(255,255,255,0.16);
+    --checkbox-text-primary: #E6E7E8;
+    --checkbox-text-secondary: #A8ADB3;
+}
+
+.winui-checkbox {
+
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: "Segoe UI Variable", "Segoe Fluent", "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    color: var(--checkbox-text-primary);
+    cursor: pointer;
+}
+
+.winui-checkbox input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px; /* WinUI default radius */
+    border: 1px solid var(--checkbox-border-default);
+    background-color: var(--checkbox-fill-default);
+    display: grid;
+    place-content: center;
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.winui-checkbox input[type="checkbox"]:hover {
+    background-color: var(--checkbox-fill-hover);
+    border-color: var(--checkbox-accent);
+}
+
+.winui-checkbox input[type="checkbox"]:checked {
+    background-color: var(--checkbox-accent);
+    border-color: var(--checkbox-accent);
+}
+
+.winui-checkbox input[type="checkbox"]:checked::before {
+    content: "✔";
+    font-size: 12px;
+    color: #fff;
+}
+
+.winui-checkbox input[type="checkbox"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,120,212,0.65);
+}
+
+.winui-checkbox .label-text {
+    color: var(--checkbox-text-primary);
+}
+
+
+    body {
     font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1.45;
@@ -72,7 +194,6 @@ body {
 h1, h2, h3 {
     font-weight: 600;
     line-height: 1.5;
-    text-shadow: black;
     padding-top: 20vh;
 }
 

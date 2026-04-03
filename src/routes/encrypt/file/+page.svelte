@@ -5,6 +5,9 @@
     import { Heading } from "flowbite-svelte";
     import { GradientButton } from "flowbite-svelte";
     import {gsap} from "gsap";
+
+    let filePath = "File Not Selected";
+    let checked = false;
 </script>
 
 <div class="relative w-full overflow-hidden text-primary bg-background">
@@ -15,13 +18,19 @@
             <BreadcrumbItem>File</BreadcrumbItem>
         </Breadcrumb>
         <Heading tag="h2" class="center mb-4 pt-6">Select the <span class="blue"> file.</span> </Heading>
-        <div class="herobox">
-            <button class="winui-button">
-                Select
-            </button>
-            
-
+        <div >
+            <div class="winui-filebox">
+                <input type="text" value={filePath} disabled />
+                <button on:click={openFileDialog}>Browse</button>
+            </div>
+            <label class="winui-checkbox">
+                <input type="checkbox" bind:checked={checked} />
+                <span class="label-text">Delete Unencrypted</span>
+            </label>
         </div>
+        <button class="winui-button" on:click={intiateEncryption}>
+            Start Encryption
+        </button>
     </div>
 
 
