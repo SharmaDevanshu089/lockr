@@ -2,6 +2,8 @@
   import { Lock, Key } from "lucide-svelte";
   import { goto } from '$app/navigation';
   import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
+  import { Heading } from "flowbite-svelte";
+  import { GradientButton } from "flowbite-svelte";
   import {gsap} from "gsap";
 
   function handleEncryptClick() {
@@ -14,22 +16,30 @@
   }
 </script>
 
-<div class="relative w-full overflow-hidden text-white">
-
+<div class="relative w-full overflow-hidden text-primary bg-background">
   <!-- card grid -->
-<!--  <div class="relative z-10 grid min-h-[calc(100vh-8rem)] grid-cols-1 gap-8 p-10 md:grid-cols-2">-->
-    <Breadcrumb aria-label="Solid background breadcrumb example">
+<div class="relative z-10 min-h-[calc(100vh-8rem)] p-4">
+    <Breadcrumb aria-label="Solid background breadcrumb example" >
       <BreadcrumbItem href="/" home>Home</BreadcrumbItem>
-      <BreadcrumbItem href="/">Projects</BreadcrumbItem>
-      <BreadcrumbItem>Flowbite Svelte</BreadcrumbItem>
     </Breadcrumb>
-<!--  </div>-->
+  <Heading tag="h2" class="center mb-4 pt-6">Encrypt your <span class="blue"> files and folders.</span></Heading>
+    <div class="herobox">
+        <button class="winui-button" on:click={handleEncryptClick}>
+            Encrypt
+        </button>
+
+        <button class="winui-button" on:click={handleDecryptClick}>
+            Decrypt
+        </button>
+
+    </div>
+  </div>
+
 
 </div>
 
 <style>
   :root {
-    --x: 50%;
-    --y: 50%;
+    /*color: ;*/
   }
 </style>

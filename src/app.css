@@ -2,20 +2,91 @@
 
 @import "tw-animate-css";
 
-@font-face {
-  font-family: 'Roboto';
-  src: url('/static/font.ttf') format('ttf');
-  font-weight: normal;
-  font-style: normal;
+:root {
+    --font-sans: "Segoe Fluent", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+    --text-primary: #E6E7E8;
+    --text-secondary: #5582bd;
+    --text-disabled: #6F757B;
+}
+.winui-choice {
+    padding: 16px 24px;
+    border-radius: 8px;
+    background-color: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-weight: 500;
+    cursor: pointer;
 }
 
+.winui-choice:hover {
+    background-color: rgba(255,255,255,0.12);
+}
+
+.winui-choice.selected {
+    background-color: rgba(78,160,255,0.45);
+    border-color: rgba(78,160,255,0.65);
+}
+
+
+.winui-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: "Segoe Fluent", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    color: #E6E7E8; /* primary text */
+    background-color: rgba(255,255,255,0.06); /* subtle neutral tint */
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    margin-left: 0.7rem;
+    margin-right: 1rem;
+}
+
+.winui-button:hover {
+    background-color: rgba(255,255,255,0.12);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.winui-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(78,160,255,0.65);
+}
+
+.winui-button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+
 body {
-  font-family: 'Roboto', sans-serif;
-    user-select: none;
-  -webkit-user-select: none; /* For Safari */
-  -moz-user-select: none; /* For older Firefox versions */
-  -ms-user-select: none;
-  overflow: hidden;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text-primary);
+    text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 {
+    font-weight: 600;
+    line-height: 1.5;
+    text-shadow: black;
+    padding-top: 20vh;
+}
+
+h1 {
+    text-shadow: 0 1px 2px rgba(0,0,0,0.45);
+}
+
+p {
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.blue {
+    color: var(--text-secondary);
 }
 *::-webkit-scrollbar {
   display: none;
@@ -23,7 +94,14 @@ body {
 * {
   scrollbar-width: none; /* Firefox */
 }
-/* 
+.herobox {
+    display: flex;
+    /*justify-content: center; !* horizontal *!*/
+    align-items: center;
+    height: 40vh;
+}
+
+/*
 @custom-variant dark (&:is(.dark *));
 :root {
     --radius: 0.625rem;
@@ -60,83 +138,97 @@ body {
     --sidebar-ring: oklch(0.704 0.04 256.788);
 } */
 
-.dark {
-    --background: transparent;
-    --foreground: oklch(0.984 0.003 247.858);
-    --card: oklch(0.208 0.042 266.359 / 0.83);
-    --card-foreground: oklch(0.984 0.003 247.858);
-    --popover: oklch(0.208 0.042 265.755);
-    --popover-foreground: oklch(0.984 0.003 247.858);
-    --primary: oklch(0.929 0.013 255.508);
-    --primary-foreground: oklch(0.208 0.042 265.755);
-    --secondary: oklch(0.279 0.041 260.031);
-    --secondary-foreground: oklch(0.984 0.003 247.858);
-    --muted: oklch(0.279 0.041 260.031);
-    --muted-foreground: oklch(0.704 0.04 256.788);
-    --accent: oklch(0.279 0.041 260.031);
-    --accent-foreground: oklch(0.984 0.003 247.858);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.551 0.027 264.364);
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    --sidebar: oklch(0.208 0.042 265.755);
-    --sidebar-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-accent: oklch(0.279 0.041 260.031);
-    --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.551 0.027 264.364);
-}
+/*.dark {*/
+/*    !* Surfaces *!*/
+/*        !* Base surfaces (semi-transparent so backdrop contributes) *!*/
+/*        --background: oklch(0.16 0.02 260 / 0.50); !* visually dark but shows backdrop *!*/
+/*        --background-hex: rgba(15,17,19,0.50);*/
 
-@theme inline {
-    --radius-sm: calc(var(--radius) - 4px);
-    --radius-md: calc(var(--radius) - 2px);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) + 4px);
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --color-card: var(--card);
-    --color-card-foreground: var(--card-foreground);
-    --color-popover: var(--popover);
-    --color-popover-foreground: var(--popover-foreground);
-    --color-primary: var(--primary);
-    --color-primary-foreground: var(--primary-foreground);
-    --color-secondary: var(--secondary);
-    --color-secondary-foreground: var(--secondary-foreground);
-    --color-muted: var(--muted);
-    --color-muted-foreground: var(--muted-foreground);
-    --color-accent: var(--accent);
-    --color-accent-foreground: var(--accent-foreground);
-    --color-destructive: var(--destructive);
-    --color-border: var(--border);
-    --color-input: var(--input);
-    --color-ring: var(--ring);
-    --color-chart-1: var(--chart-1);
-    --color-chart-2: var(--chart-2);
-    --color-chart-3: var(--chart-3);
-    --color-chart-4: var(--chart-4);
-    --color-chart-5: var(--chart-5);
-    --color-sidebar: var(--sidebar);
-    --color-sidebar-foreground: var(--sidebar-foreground);
-    --color-sidebar-primary: var(--sidebar-primary);
-    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-    --color-sidebar-accent: var(--sidebar-accent);
-    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    --color-sidebar-border: var(--sidebar-border);
-    --color-sidebar-ring: var(--sidebar-ring);
-}
+/*        --card: oklch(0.22 0.03 260 / 0.72);*/
+/*        --card-hex: rgba(20,22,24,0.72);*/
 
-@layer base {
-    * {
-        @apply border-border outline-ring/50;
-    }
-    body {
-        @apply bg-background text-foreground;
-    }
-}
+/*        --popover: oklch(0.24 0.035 260 / 0.80);*/
+/*        --popover-hex: rgba(27,30,34,0.80);*/
+
+/*        !* Text *!*/
+/*        --foreground: oklch(0.98 0.003 248); !* primary text *!*/
+/*        --foreground-hex: #E6E7E8;*/
+/*        --muted-foreground: oklch(0.72 0.03 256); !* secondary text *!*/
+/*        --muted-foreground-hex: #A8ADB3;*/
+/*        --disabled: oklch(0.55 0.02 255);*/
+/*        --disabled-hex: #6F757B;*/
+
+/*        !* Accents *!*/
+/*        --primary: oklch(1 0 0); !* cool blue *!*/
+/*        --primary-hex: #4EA0FF;*/
+/*        --accent-warm: oklch(0.65 0.22 60);*/
+/*        --accent-warm-hex: #FFB86B;*/
+
+/*        !* Status *!*/
+/*        --success: #4CD964;*/
+/*        --destructive: #FF6B6B;*/
+/*        --warning: #FFCC00;*/
+
+/*        !* Controls *!*/
+/*        --input: rgba(255,255,255,0.06);*/
+/*        --border: rgba(255,255,255,0.06);*/
+/*        --ring: rgba(78,160,255,0.22);*/
+
+/*        !* Acrylic tuning for WinUI 3 look *!*/
+/*        --acrylic-tint-color: 78,160,255; !* store RGB for easy rgba usage *!*/
+/*        --acrylic-tint-alpha: 0.45; !* 40-50% tint as requested *!*/
+/*        --acrylic-blur: 18px;*/
+/*        --acrylic-noise: 0.04;*/
+
+/*        !* Layout *!*/
+/*        --radius: 10px;*/
+/*        --radius-sm: calc(var(--radius) - 4px);*/
+
+/*}*/
+
+/*@theme inline {*/
+/*    --radius-sm: calc(var(--radius) - 4px);*/
+/*    --radius-md: calc(var(--radius) - 2px);*/
+/*    --radius-lg: var(--radius);*/
+/*    !*--radius-xl: calc(var(--radius) + 4px);*!*/
+/*    --color-background: var(--background);*/
+/*    --color-foreground: var(--foreground);*/
+/*    --color-card: var(--card);*/
+/*    --color-card-foreground: var(--card-foreground);*/
+/*    --color-popover: var(--popover);*/
+/*    --color-popover-foreground: var(--popover-foreground);*/
+/*    --color-primary: var(--primary);*/
+/*    --color-primary-foreground: var(--primary-foreground);*/
+/*    --color-secondary: var(--secondary);*/
+/*    --color-secondary-foreground: var(--secondary-foreground);*/
+/*    --color-muted: var(--muted);*/
+/*    --color-muted-foreground: var(--muted-foreground);*/
+/*    --color-accent: var(--accent);*/
+/*    --color-accent-foreground: var(--accent-foreground);*/
+/*    --color-destructive: var(--destructive);*/
+/*    --color-border: var(--border);*/
+/*    --color-input: var(--input);*/
+/*    --color-ring: var(--ring);*/
+/*    --color-chart-1: var(--chart-1);*/
+/*    --color-chart-2: var(--chart-2);*/
+/*    --color-chart-3: var(--chart-3);*/
+/*    --color-chart-4: var(--chart-4);*/
+/*    --color-chart-5: var(--chart-5);*/
+/*    --color-sidebar: var(--sidebar);*/
+/*    --color-sidebar-foreground: var(--sidebar-foreground);*/
+/*    --color-sidebar-primary: var(--sidebar-primary);*/
+/*    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);*/
+/*    --color-sidebar-accent: var(--sidebar-accent);*/
+/*    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);*/
+/*    --color-sidebar-border: var(--sidebar-border);*/
+/*    --color-sidebar-ring: var(--sidebar-ring);*/
+/*}*/
+
+/*@layer base {*/
+/*    * {*/
+/*        @apply border-border outline-ring/50;*/
+/*    }*/
+/*    body {*/
+/*        @apply bg-background text-foreground;*/
+/*    }*/
+/*}*/

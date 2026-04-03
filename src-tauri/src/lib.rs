@@ -3,7 +3,7 @@ use aes_gcm::aead::{Aead, KeyInit};
 use aes_gcm::{Aes256Gcm, Key, Nonce};
 use rand::RngCore;
 use rfd::FileDialog;
-use window_vibrancy::apply_acrylic;
+use window_vibrancy::apply_mica;
 use tauri::Manager;
 use std::fs::{read, File};
 mod encrypt;
@@ -19,8 +19,7 @@ pub fn run() {
             {
                 // The second parameter is an optional RGBA tint color: (R, G, B, Alpha)
                 // Adjust these values to match your app's theme
-                apply_acrylic(&window, Some((18, 18, 18, 125)))
-                    .expect("Failed to apply acrylic effect");
+                apply_mica(&window,None).expect("Failed to apply acrylic effect");
             }
 
             Ok(())
