@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: 'Roboto';
-  src: url('/font.ttf') format('ttf');
+  src: url('/static/font.ttf') format('ttf');
   font-weight: normal;
   font-style: normal;
 }
@@ -61,9 +61,9 @@ body {
 } */
 
 .dark {
-    --background: oklch(0.129 0.042 264.695);
+    --background: transparent;
     --foreground: oklch(0.984 0.003 247.858);
-    --card: oklch(0.208 0.042 265.755);
+    --card: oklch(0.208 0.042 266.359 / 0.83);
     --card-foreground: oklch(0.984 0.003 247.858);
     --popover: oklch(0.208 0.042 265.755);
     --popover-foreground: oklch(0.984 0.003 247.858);

@@ -3,6 +3,8 @@ use aes_gcm::aead::{Aead, KeyInit};
 use aes_gcm::{Aes256Gcm, Key, Nonce};
 use rand::RngCore;
 use rfd::FileDialog;
+use window_vibrancy::apply_acrylic;
+use tauri::Manager;
 use std::fs::{read, File};
 mod encrypt;
 //use std::path::Path;
@@ -10,6 +12,19 @@ use std::path::PathBuf;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .setup(|app| {
+            let window = app.get_webview_window("main").unwrap();
+
+            #[cfg(target_os = "windows")]
+            {
+                // The second parameter is an optional RGBA tint color: (R, G, B, Alpha)
+                // Adjust these values to match your app's theme
+                apply_acrylic(&window, Some((18, 18, 18, 125)))
+                    .expect("Failed to apply acrylic effect");
+            }
+
+            Ok(())
+        })
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog,get_file_path])
         .run(tauri::generate_context!())
