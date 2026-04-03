@@ -14,21 +14,12 @@
     goto('/');
   }
 
-  function addBorder() {
-    document.getElementById("navbar")?.classList.add('shadow-xl');
-    document.getElementById("navbar")?.classList.remove('shadow-xs');
-  }
-  function removerBorder() {
-    document.getElementById("navbar")?.classList.remove('shadow-xl')
-  }
 </script>
 
 <Toolbar.Root
   id="navbar"
   class="relative flex h-18 w-full items-center px-4 cursor-grab active:cursor-grabbing transition duration-300 shadow-xs"
   data-tauri-drag-region
-  onmouseover={addBorder}
-  onmouseleave={removerBorder}
 >
   <!-- Left side: back button -->
   <div class="flex items-center z-20">
