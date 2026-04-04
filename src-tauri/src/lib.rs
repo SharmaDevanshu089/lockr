@@ -9,6 +9,8 @@ use std::fs::{read, File};
 mod encrypt;
 //use std::path::Path;
 use std::path::PathBuf;
+use std::str::Matches;
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -36,25 +38,15 @@ async fn get_file_path() {
     }
 }
 #[tauri::command]
-fn open_file_dialog() -> String {
-    // I really do not have energy to deal with this
-    // TODO:Add the proper error handling later on with the project
-    let file_url = FileDialog::new().pick_file().unwrap();
-    let file_url_string = file_url.to_string_lossy().into_owned();
-    // let unfiltered_url = match  {
-    //     Some(file_url_string) => file_url_string.to_string(),
-    //     None => {
-    //         match open_file_dialog(){
-    //             Ok(file_url) => file_url_string,
-    //             Err(message) => open_file_dialog()
-    //         }
-    //     }
-    // };
-    // if unfiltered_url.is_empty() {
-    //     Err(String::from("FileNull"))
-    // }
-    // else {Ok(unfiltered_url)}
-    return file_url_string;
+fn open_file_dialog() -> Result<PathBuf, String> {
+    let filepath=  FileDialog::new().pick_file().ok_or(String::from("FileDialog does not exist"));
+    let check_for_empty_path = filepath.clone()?;
+    let empty_path_string = check_for_empty_path.to_string_lossy();
+    if empty_path_string.is_empty() {
+        println!("Empty File Found");
+        return open_file_dialog()
+    }
+    filepath
 }
 fn encript_file_by_path(path_to_file: PathBuf) {
     let file = fs::read(&path_to_file).unwrap();
