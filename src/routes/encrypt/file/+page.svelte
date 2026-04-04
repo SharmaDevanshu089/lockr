@@ -12,6 +12,7 @@
     let browseButton: HTMLElement;
     let SpinnerInBrowseButton: HTMLElement;
     let heroButton: HTMLElement;
+    let keyValue = "Enter Password to Encrypt";
 
     onMount(() =>
     {
@@ -39,7 +40,6 @@
             browseButton.style.display="unset";
         }
     }
-
 </script>
 
 <div class="relative w-full overflow-hidden text-primary bg-background">
