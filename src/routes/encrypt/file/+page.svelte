@@ -28,15 +28,16 @@
             fileData = await invoke("open_file_dialog");
             let filename = fileData.filename;
             filePath = fileData.filepath;
+            SpinnerInBrowseButton.style.display="none";
+            browseButton.style.display="unset";
+            heroButton.disabled = false;
         }
         catch (error) {
             console.log("Error Condition is ran");
             console.log(error);
-            // await openFileDialog();
+            SpinnerInBrowseButton.style.display="none";
+            browseButton.style.display="unset";
         }
-        SpinnerInBrowseButton.style.display="none";
-        browseButton.style.display="unset";
-        heroButton.disabled = false;
     }
 
 </script>
