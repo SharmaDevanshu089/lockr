@@ -3,6 +3,7 @@
     import { goto } from '$app/navigation';
     import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
     import { Heading } from "flowbite-svelte";
+
 </script>
 
 <div class="relative w-full overflow-hidden text-primary bg-background">
@@ -17,7 +18,6 @@
             <button class="winui-button">
                 File
             </button>
-
         </div>
     </div>
 

@@ -8,6 +8,8 @@
 
     let filePath = "File Not Selected";
     let checked = false;
+    let heroButton = document.getElementById("HeroButton");
+
 </script>
 
 <div class="relative w-full overflow-hidden text-primary bg-background">
@@ -25,10 +27,10 @@
             </div>
             <label class="winui-checkbox">
                 <input type="checkbox" bind:checked={checked} />
-                <span class="label-text">Delete Unencrypted</span>
+                <span class="label-text">Also Delete the <b> unencrypted </b>( original ) file</span>
             </label>
         </div>
-        <button class="winui-button" on:click={intiateEncryption}>
+        <button id="HeroButton" class="winui-button" on:click={intiateEncryption} disabled>
             Start Encryption
         </button>
     </div>

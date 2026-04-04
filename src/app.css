@@ -7,6 +7,8 @@
     --text-primary: #E6E7E8;
     --text-secondary: #5582bd;
     --text-disabled: #6F757B;
+    --button-text-primary: #E6E7E8;
+    --button-text-disabled: #6F757B;
 }
 .winui-choice {
     padding: 16px 24px;
@@ -57,7 +59,7 @@
 
 .winui-button:disabled {
     opacity: 0.45;
-    cursor: default;
+    cursor: not-allowed;
 }
 
 :root {
