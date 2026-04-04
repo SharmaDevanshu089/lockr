@@ -40,6 +40,10 @@
             browseButton.style.display="unset";
         }
     }
+    async function initiateEncryption(){
+        console.log("Initiating Encryption");
+
+    }
 </script>
 
 <div class="relative w-full overflow-hidden text-primary bg-background">
@@ -60,7 +64,7 @@
                 <span class="label-text">Also Delete the <b> unencrypted </b>( original ) file</span>
             </label>
         </div>
-        <button id="HeroButton" class="winui-button" on:click={intiateEncryption} disabled>
+        <button id="HeroButton" class="winui-button" on:click={initiateEncryption} disabled>
             Start Encryption
         </button>
     </div>

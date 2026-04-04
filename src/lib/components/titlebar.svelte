@@ -24,14 +24,14 @@
   <!-- Left side: back button -->
   <div class="flex items-center z-20">
     {#if $page.url.pathname !== '/'}
-      <button
-        class="shrink-0 mr-4 flex h-9 w-9 items-center justify-center rounded-xl p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-        aria-label="Back"
-        on:click={goBack}
-        data-tauri-drag-region
-      >
-        <ArrowLeft class="h-5 w-5" />
-      </button>
+<!--      <button-->
+<!--        class="shrink-0 mr-4 flex h-9 w-9 items-center justify-center rounded-xl p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"-->
+<!--        aria-label="Back"-->
+<!--        on:click={goBack}-->
+<!--        data-tauri-drag-region-->
+<!--      >-->
+<!--        <ArrowLeft class="h-5 w-5" />-->
+<!--      </button>-->
     {/if}
   </div>
 
@@ -43,7 +43,7 @@
   <!-- Right side: close button -->
   <div class="flex flex-1 justify-end z-20" data-tauri-drag-region>
     <button
-      class="close inline-flex h-9 w-9 items-center justify-center rounded-xl p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring hover:border-accent"
+      class="close inline-flex h-9 w-9 items-center justify-center rounded-xl p-2 text-muted-foreground hover:bg-[#e81123] hover:text-white active:bg-[#f1707a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e81123]"
       aria-label="Close"
       on:click={appclose}
       data-tauri-drag-region
