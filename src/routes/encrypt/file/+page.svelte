@@ -3,12 +3,38 @@
     import { goto } from '$app/navigation';
     import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
     import { Heading } from "flowbite-svelte";
+    import { Spinner } from "flowbite-svelte";
     import { GradientButton } from "flowbite-svelte";
     import {gsap} from "gsap";
+    import {onMount} from "svelte";
 
     let filePath = "File Not Selected";
     let checked = false;
-    let heroButton = document.getElementById("HeroButton");
+    let browseButton: HTMLElement;
+    let SpinnerInBrowseButton: HTMLElement;
+    let heroButton: HTMLElement;
+
+    onMount(() =>
+    {
+        heroButton = document.getElementById("HeroButton");
+        SpinnerInBrowseButton = document.getElementById("SpinnerInBrowse");
+        browseButton = document.getElementById("BrowseText");
+    });
+    async function openFileDialog(){
+        console.log("Browse Clicked");
+        SpinnerInBrowseButton.style.display="unset";
+        browseButton.style.display="none";
+        try {
+            filePath = await invoke("open_file_dialog")
+        }
+        catch (error) {
+            console.log(error);
+            await openFileDialog();
+        }
+        SpinnerInBrowseButton.style.display="none";
+        browseButton.style.display="unset";
+        heroButton.disabled = false;
+    }
 
 </script>
 
@@ -23,7 +49,7 @@
         <div >
             <div class="winui-filebox">
                 <input type="text" value={filePath} disabled />
-                <button on:click={openFileDialog}>Browse</button>
+                <button on:click={openFileDialog}><Spinner type="dots" id="SpinnerInBrowse" size="5" style="display: none" /><text id="BrowseText" style="display:unset">Browse</text></button>
             </div>
             <label class="winui-checkbox">
                 <input type="checkbox" bind:checked={checked} />
