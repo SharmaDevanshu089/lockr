@@ -1,14 +1,13 @@
 <script lang="ts">
     import { invoke } from '@tauri-apps/api/core';
-    import { goto } from '$app/navigation';
     import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
     import { Heading } from "flowbite-svelte";
     import { Spinner } from "flowbite-svelte";
-    import { GradientButton } from "flowbite-svelte";
     import {gsap} from "gsap";
     import {onMount} from "svelte";
 
     let filePath = "File Not Selected";
+    let fileData;
     let checked = false;
     let browseButton: HTMLElement;
     let SpinnerInBrowseButton: HTMLElement;
@@ -25,11 +24,15 @@
         SpinnerInBrowseButton.style.display="unset";
         browseButton.style.display="none";
         try {
-            filePath = await invoke("open_file_dialog")
+            console.log("Opening Invoke");
+            fileData = await invoke("open_file_dialog");
+            let filename = fileData.filename;
+            filePath = fileData.filepath;
         }
         catch (error) {
+            console.log("Error Condition is ran");
             console.log(error);
-            await openFileDialog();
+            // await openFileDialog();
         }
         SpinnerInBrowseButton.style.display="none";
         browseButton.style.display="unset";

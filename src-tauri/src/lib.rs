@@ -5,11 +5,14 @@ use rand::RngCore;
 use rfd::FileDialog;
 use window_vibrancy::apply_mica;
 use tauri::Manager;
-use std::fs::{read, File};
-mod encrypt;
-//use std::path::Path;
 use std::path::PathBuf;
-use std::str::Matches;
+use serde::Serialize;
+
+#[derive(Serialize)]
+struct FileDialogData {
+    filepath:PathBuf,
+    filename:String,
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -38,15 +41,18 @@ async fn get_file_path() {
     }
 }
 #[tauri::command]
-fn open_file_dialog() -> Result<PathBuf, String> {
-    let filepath=  FileDialog::new().pick_file().ok_or(String::from("FileDialog does not exist"));
-    let check_for_empty_path = filepath.clone()?;
-    let empty_path_string = check_for_empty_path.to_string_lossy();
+fn open_file_dialog() -> Result<FileDialogData, String> {
+    let fileDialogResult=  FileDialog::new().pick_file().ok_or(String::from("FileDialog does not exist"));
+    let filepath = fileDialogResult.clone()?;
+    let file_name = fileDialogResult.clone()?.file_name().unwrap().to_string_lossy().to_string();
+    let binding = filepath.clone();
+    let empty_path_string = binding.to_string_lossy();
     if empty_path_string.is_empty() {
         println!("Empty File Found");
         return open_file_dialog()
     }
-    filepath
+    let response:FileDialogData = FileDialogData {filename: file_name, filepath: filepath.clone()};
+    return Ok(response);
 }
 fn encript_file_by_path(path_to_file: PathBuf) {
     let file = fs::read(&path_to_file).unwrap();
