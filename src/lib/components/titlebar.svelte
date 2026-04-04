@@ -5,6 +5,7 @@
   import { page } from '$app/stores';
   import { goto } from '$app/navigation';
 
+
   function appclose() {
     console.log("Close Initiated");
     getCurrentWindow().close();

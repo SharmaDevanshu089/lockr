@@ -13,6 +13,8 @@
     let SpinnerInBrowseButton: HTMLElement;
     let heroButton: HTMLElement;
     let keyValue = "Enter Password to Encrypt";
+    let initialMenu = true;
+    let modalSelect = false;
 
     onMount(() =>
     {
@@ -21,7 +23,7 @@
         browseButton = document.getElementById("BrowseText");
     });
     async function openFileDialog(){
-        console.log("Browse Clicked");
+        console.log("Browse Clicked ,Starting visual cues");
         SpinnerInBrowseButton.style.display="unset";
         browseButton.style.display="none";
         try {
@@ -29,6 +31,7 @@
             fileData = await invoke("open_file_dialog");
             let filename = fileData.filename;
             filePath = fileData.filepath;
+            console.log("Stopping Visual Cues");
             SpinnerInBrowseButton.style.display="none";
             browseButton.style.display="unset";
             heroButton.disabled = false;
@@ -42,10 +45,9 @@
     }
     async function initiateEncryption(){
         console.log("Initiating Encryption");
-
     }
 </script>
-
+{#if initialMenu}
 <div class="relative w-full overflow-hidden text-primary bg-background">
     <div class="relative z-10 min-h-[calc(100vh-8rem)] p-4">
         <Breadcrumb aria-label="Solid background breadcrumb example" >
@@ -71,3 +73,4 @@
 
 
 </div>
+    {/if}
