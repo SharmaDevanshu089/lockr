@@ -43,7 +43,7 @@
   <!-- Right side: close button -->
   <div class="flex flex-1 justify-end z-20" data-tauri-drag-region>
     <button
-      class="close inline-flex h-9 w-9 items-center justify-center rounded-xl p-2 text-muted-foreground hover:bg-[#e81123] hover:text-white active:bg-[#f1707a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e81123]"
+      class="close inline-flex h-9 w-9 items-center justify-center rounded-xl p-2 text-muted-foreground border border-transparent transition-all duration-200 hover:bg-red-500 hover:text-white hover:border-red-600 hover:shadow-md active:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
       aria-label="Close"
       on:click={appclose}
       data-tauri-drag-region
