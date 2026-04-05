@@ -1,4 +1,9 @@
 use std::fs;
+use std::io::{Error, Write};
+use std::io::BufRead;
+use std::io::BufReader;
+use std::io::BufWriter;
+use std::io::Read;
 use aes_gcm::aead::{Aead, KeyInit};
 use aes_gcm::{Aes256Gcm, Key, Nonce};
 use rand::RngCore;
@@ -79,8 +84,30 @@ fn get_resulting_dir() ->PathBuf{
 }
 
 #[tauri::command]
-fn final_encryption(responsepackage:EncryptionCommandRequestPackage) {
-    println!("{:?}", responsepackage);
+fn final_encryption(responsepackage:EncryptionCommandRequestPackage) -> Result<(),String> {
+    const BUFFER_SIZE:usize = 4;
+    let mut nonce_bytes = [0u8; 12];
+    let key_bytes = responsepackage.password;
+    rand::thread_rng().fill_bytes(&mut nonce_bytes);
+    let key = Key::<Aes256Gcm>::from_slice(&key_bytes);
+    let nonce = Nonce::from_slice(&nonce_bytes);
+    let mut path_to_write = responsepackage.resultant_dir.join(responsepackage.resultname);
+    let mut path_to_read = responsepackage.filepath;
+    path_to_write.set_extension(".aes");
+    let mut file_to_write = fs::File::create(&path_to_write).map_err(|e| format!("File Creation Error{}", e))?;
+    let file_to_read = fs::File::open(&path_to_read).map_err(|e| format!("File Opening Error{}", e))?;
+    let mut BufferReader = std::io::BufReader::new(file_to_read);
+    let mut BufferWriter = std::io::BufWriter::new(file_to_write);
+    let mut buffer = [0u8; BUFFER_SIZE * 1024];
+    let cipher = Aes256Gcm::new(&key);
+    BufferWriter.write_all(&nonce_bytes).map_err(|e| format!("File Write Error{}", e))?;
+    loop {
+        let n = BufferReader.read(&mut buffer).map_err(|e| format!("File Read Error{}", e))?;
+        if n == 0 { break; }
+        let ciphertext = cipher.encrypt(nonce, &buffer[..n]).map_err(|e| format!("File Encryption Error{}", e))?;
+        BufferWriter.write_all(&ciphertext).map_err(|e| format!("File Write Error{}", e))?;
+    }
+    Ok(())
 }
 
 fn encript_file_by_path(path_to_file: PathBuf) {

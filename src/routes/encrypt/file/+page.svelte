@@ -72,7 +72,12 @@
             checked  : checked,
         }
         loaderState = "Encrypting";
-        await invoke("final_encryption", {responsepackage:encryptionPackageJS});
+        try {
+            await invoke("final_encryption", {responsepackage:encryptionPackageJS});
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 </script>
 <div class="relative w-full overflow-hidden text-primary bg-background">
