@@ -110,7 +110,7 @@
         {/if}
         {#if loading}
             <Spinner type="orbit" color="rose" />
-            {/if}
+        {/if}
     </div>
 
 
