@@ -163,6 +163,7 @@ fn open_folder_dialog() -> String {
 
 #[tauri::command]
 fn open_in_explorer(new_file_path:String) -> Result<(), String> {
+    println!("New File Path: {}", new_file_path);
     let _command_execution = Command::new("explorer.exe").args(&["/select,",&new_file_path]).spawn().map_err(|e| format!("Failure: Command , {}",e));
     Ok(())
 }

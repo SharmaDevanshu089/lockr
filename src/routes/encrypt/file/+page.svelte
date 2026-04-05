@@ -84,11 +84,13 @@
         }
         loading = false;
     }
-    async function showFileLocation(){
-        let newfilePath = desktopDirectory+"\\"+filename;
-        console.log(newfilePath);
+    async function showFileLocation() {
+        let newFilename = filename.replace(/\.[^.]+$/, ".aes");
+        let new_file_path = desktopDirectory + "\\" + newFilename;
+
+        console.log("Path being sent to Rust:", new_file_path);
         try {
-            await invoke("open_in_explorer" ,{newfilePath: String});
+            await invoke("open_in_explorer" , { newFilePath: new_file_path });
         }
         catch (error) {
             console.log(error);
