@@ -64,7 +64,7 @@
         modalSelect = false;
         loading = true;
         desktopDirectory = await invoke("get_resulting_dir");
-        let encryptionPackage = {
+        let encryptionPackageJS = {
             resultant_dir: desktopDirectory,
             password: passwordArray,
             resultname : filename,
@@ -72,6 +72,7 @@
             checked  : checked,
         }
         loaderState = "Encrypting";
+        await invoke("final_encryption", {responsepackage:encryptionPackageJS});
     }
 </script>
 <div class="relative w-full overflow-hidden text-primary bg-background">
@@ -100,7 +101,7 @@
         {#if modalSelect}
             <div class="dialog-overlay">
                 <div class="dialog">
-                    <h2 class="dialog-title">Enter Password</h2>
+                    <h2 class="dialog-title">Encryption Key</h2>
                     <p class="dialog-warning">
                         ⚠ If the password key is lost, your data will be unrecoverable.<br> There is a Random Key Generated, its recommended you use that and store it somewhere securely!
                     </p>

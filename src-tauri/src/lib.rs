@@ -20,6 +20,7 @@ struct EncryptionCommandRequestPackage {
     resultant_dir:PathBuf,
     password:[u8; 32],
     resultname:PathBuf,
+    filepath: PathBuf,
     checked:bool,
 }
 
@@ -78,8 +79,8 @@ fn get_resulting_dir() ->PathBuf{
 }
 
 #[tauri::command]
-fn final_encryption(response:EncryptionCommandRequestPackage) {
-    println!("{:?}", response);
+fn final_encryption(responsepackage:EncryptionCommandRequestPackage) {
+    println!("{:?}", responsepackage);
 }
 
 fn encript_file_by_path(path_to_file: PathBuf) {
