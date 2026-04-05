@@ -6,13 +6,21 @@ use rfd::FileDialog;
 use window_vibrancy::apply_mica;
 use tauri::Manager;
 use std::path::PathBuf;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use dirs::desktop_dir;
 
 #[derive(Serialize)]
 struct FileDialogData {
     filepath:PathBuf,
     filename:String,
+}
+
+#[derive(Deserialize,Debug)]
+struct EncryptionCommandRequestPackage {
+    resultant_dir:PathBuf,
+    password:[u8; 32],
+    resultname:PathBuf,
+    checked:bool,
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -31,7 +39,7 @@ pub fn run() {
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog,get_file_path,generate_key,get_resulting_dir])
+        .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog,get_file_path,generate_key,get_resulting_dir,final_encryption])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -68,6 +76,12 @@ fn get_resulting_dir() ->PathBuf{
     let resulting_directory = desktop_dir().unwrap();
     resulting_directory
 }
+
+#[tauri::command]
+fn final_encryption(response:EncryptionCommandRequestPackage) {
+    println!("{:?}", response);
+}
+
 fn encript_file_by_path(path_to_file: PathBuf) {
     let file = fs::read(&path_to_file).unwrap();
     let mut key_bytes = [0u8; 32];
