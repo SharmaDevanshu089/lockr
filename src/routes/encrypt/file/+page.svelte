@@ -21,6 +21,7 @@
     let loaderState = "Initializing...";
     let desktopDirectory;
     let filename;
+    let sucessState = false;
 
     onMount(() =>
     {
@@ -74,10 +75,18 @@
         loaderState = "Encrypting";
         try {
             await invoke("final_encryption", {responsepackage:encryptionPackageJS});
+            console.log("Finished Encryption");
+            sucessState = true;
         }
         catch (error) {
             console.log(error);
+            //TODO: Create a Proper handle for stopping the encryption and popup
         }
+        loading = false;
+    }
+    async function showFileLocation(){
+        let newfilePath = desktopDirectory+"\\"+filename;
+        console.log(newfilePath);
     }
 </script>
 <div class="relative w-full overflow-hidden text-primary bg-background">
@@ -126,6 +135,10 @@
         {#if loading}
             <Spinner type="orbit" color="rose" />
             <h1>{loaderState}</h1>
+        {/if}
+        {#if sucessState}
+            <h1>Successfully encrypted</h1>
+            <button class="winui-button" on:click={showFileLocation}>Show File Location</button>
         {/if}
     </div>
 

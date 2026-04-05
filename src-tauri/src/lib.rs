@@ -93,7 +93,7 @@ fn final_encryption(responsepackage:EncryptionCommandRequestPackage) -> Result<(
     let nonce = Nonce::from_slice(&nonce_bytes);
     let mut path_to_write = responsepackage.resultant_dir.join(responsepackage.resultname);
     let mut path_to_read = responsepackage.filepath;
-    path_to_write.set_extension(".aes");
+    path_to_write.set_extension("aes");
     let mut file_to_write = fs::File::create(&path_to_write).map_err(|e| format!("File Creation Error{}", e))?;
     let file_to_read = fs::File::open(&path_to_read).map_err(|e| format!("File Opening Error{}", e))?;
     let mut BufferReader = std::io::BufReader::new(file_to_read);
