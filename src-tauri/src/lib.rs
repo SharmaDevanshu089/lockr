@@ -7,6 +7,7 @@ use window_vibrancy::apply_mica;
 use tauri::Manager;
 use std::path::PathBuf;
 use serde::Serialize;
+use dirs::desktop_dir;
 
 #[derive(Serialize)]
 struct FileDialogData {
@@ -60,6 +61,12 @@ fn generate_key() -> [u8;32]{
     rand::thread_rng().fill_bytes(&mut key_bytes);
     println!("{:?}",key_bytes.clone());
     return key_bytes;
+}
+
+#[tauri::command]
+fn get_resulting_directctory() ->PathBuf{
+    let resulting_directory = desktop_dir().unwrap();
+    resulting_directory
 }
 fn encript_file_by_path(path_to_file: PathBuf) {
     let file = fs::read(&path_to_file).unwrap();
