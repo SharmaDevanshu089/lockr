@@ -30,7 +30,7 @@ pub fn run() {
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog,get_file_path])
+        .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog,get_file_path,generate_key])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

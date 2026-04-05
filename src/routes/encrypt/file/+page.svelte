@@ -15,8 +15,10 @@
     let keyValue = "Enter Password to Encrypt";
     let initialMenu = true;
     let modalSelect = false;
-    let password = "";
+    let password ;
     let disabledModalConfirm = true;
+    let passwordArray;
+    let loading = false;
 
 
     onMount(() =>
@@ -50,9 +52,17 @@
         console.log("Initiating Encryption");
         initialMenu = false;
         modalSelect = true;
+        passwordArray = await invoke("generate_key");
+        console.log(passwordArray);
+        password = passwordArray.toString();
+        console.log(password);
+        disabledModalConfirm = false;
     }
     async function confirmEncryptionModal(){
         console.log("Confirming Encryption");
+        modalSelect = false;
+        loading = true;
+
     }
 </script>
 <div class="relative w-full overflow-hidden text-primary bg-background">
@@ -98,6 +108,9 @@
                 </div>
             </div>
         {/if}
+        {#if loading}
+            <Spinner type="orbit" color="rose" />
+            {/if}
     </div>
 
 
