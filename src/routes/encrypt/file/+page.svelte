@@ -16,7 +16,8 @@
     let initialMenu = true;
     let modalSelect = false;
     let password = "";
-    let disabled = false;
+    let disabledModalConfirm = true;
+
 
     onMount(() =>
     {
@@ -82,18 +83,17 @@
                 <div class="dialog">
                     <h2 class="dialog-title">Enter Password</h2>
                     <p class="dialog-warning">
-                        ⚠ If the password is lost, your data will be unrecoverable.<br> There is a Random Key Generated, its recommended you use that and store it somewhere securely
+                        ⚠ If the password key is lost, your data will be unrecoverable.<br> There is a Random Key Generated, its recommended you use that and store it somewhere securely!
                     </p>
 
                     <input
                             type="text"
                             bind:value={password}
                             class="dialog-input"
-                            placeholder="Enter password..."
-                            disabled={disabled}
+                            disabled=false
                     />
                     <div class="dialog-actions">
-                        <button class="dialog-button" on:click={confirmEncryptionModal} disabled={disabled}>OK</button>
+                        <button class="dialog-button" on:click={confirmEncryptionModal} disabled={disabledModalConfirm}>OK</button>
                     </div>
                 </div>
             </div>
