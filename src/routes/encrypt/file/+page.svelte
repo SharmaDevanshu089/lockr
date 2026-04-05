@@ -15,6 +15,8 @@
     let keyValue = "Enter Password to Encrypt";
     let initialMenu = true;
     let modalSelect = false;
+    let password = "";
+    let disabled = false;
 
     onMount(() =>
     {
@@ -48,6 +50,9 @@
         initialMenu = false;
         modalSelect = true;
     }
+    async function confirmEncryptionModal(){
+        console.log("Confirming Encryption");
+    }
 </script>
 <div class="relative w-full overflow-hidden text-primary bg-background">
     <div class="relative z-10 min-h-[calc(100vh-8rem)] p-4">
@@ -73,7 +78,25 @@
         </button>
         {/if}
         {#if modalSelect}
+            <div class="dialog-overlay">
+                <div class="dialog">
+                    <h2 class="dialog-title">Enter Password</h2>
+                    <p class="dialog-warning">
+                        ⚠ If the password is lost, your data will be unrecoverable.<br> There is a Random Key Generated, its recommended you use that and store it somewhere securely
+                    </p>
 
+                    <input
+                            type="text"
+                            bind:value={password}
+                            class="dialog-input"
+                            placeholder="Enter password..."
+                            disabled={disabled}
+                    />
+                    <div class="dialog-actions">
+                        <button class="dialog-button" on:click={confirmEncryptionModal} disabled={disabled}>OK</button>
+                    </div>
+                </div>
+            </div>
         {/if}
     </div>
 

@@ -3,6 +3,110 @@
 @import "tw-animate-css";
 
 :root {
+    --dialog-bg: rgba(32,32,32,0.95);
+    --dialog-border: rgba(255,255,255,0.08);
+    --dialog-text: #E6E7E8;
+    --dialog-text-secondary: #A8ADB3;
+    --dialog-error: #FF4C4C;
+    --dialog-accent: #0078D4;
+}
+
+.dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.dialog {
+    background-color: var(--dialog-bg);
+    border: 1px solid var(--dialog-border);
+    border-radius: 8px;
+    padding: 24px;
+    width: 360px;
+    color: var(--dialog-text);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.dialog-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.dialog-warning {
+    color: var(--dialog-text-secondary);
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.dialog-input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--dialog-border);
+    background-color: rgba(255,255,255,0.06);
+    color: var(--dialog-text);
+    font-size: 14px;
+    margin-bottom: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dialog-input:focus:not(:disabled) {
+    outline: none;
+    border-color: var(--dialog-accent);
+    box-shadow: 0 0 0 2px rgba(0,120,212,0.65);
+}
+
+.dialog-input:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.dialog-error {
+    color: var(--dialog-error);
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dialog-button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    background-color: var(--dialog-accent);
+    color: #fff;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.dialog-button:hover:not(:disabled) {
+    background-color: #1083E8;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.dialog-button:focus:not(:disabled) {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0,120,212,0.65);
+}
+
+.dialog-button:disabled {
+    opacity: 0.45;
+    cursor: default;
+    box-shadow: none;
+}
+
+
+:root {
     --font-sans: "Segoe Fluent", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
     --text-primary: #E6E7E8;
     --text-secondary: #5582bd;
