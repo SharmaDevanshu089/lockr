@@ -45,11 +45,13 @@
     }
     async function initiateEncryption(){
         console.log("Initiating Encryption");
+        initialMenu = false;
+        modalSelect = true;
     }
 </script>
-{#if initialMenu}
 <div class="relative w-full overflow-hidden text-primary bg-background">
     <div class="relative z-10 min-h-[calc(100vh-8rem)] p-4">
+        {#if initialMenu}
         <Breadcrumb aria-label="Solid background breadcrumb example" >
             <BreadcrumbItem href="/" home>Home</BreadcrumbItem>
             <BreadcrumbItem href="/encrypt">Encrypt</BreadcrumbItem>
@@ -69,8 +71,11 @@
         <button id="HeroButton" class="winui-button" on:click={initiateEncryption} disabled>
             Start Encryption
         </button>
+        {/if}
+        {#if modalSelect}
+
+        {/if}
     </div>
 
 
 </div>
-    {/if}
