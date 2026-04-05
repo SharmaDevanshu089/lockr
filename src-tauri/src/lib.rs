@@ -1,3 +1,4 @@
+use std::fmt::format;
 use std::fs;
 use std::io::{Error, Write};
 use std::io::BufRead;
@@ -13,6 +14,8 @@ use tauri::Manager;
 use std::path::PathBuf;
 use serde::{Deserialize, Serialize};
 use dirs::desktop_dir;
+use std::process::Command;
+use tokio::task::spawn_blocking;
 
 #[derive(Serialize)]
 struct FileDialogData {
@@ -45,7 +48,7 @@ pub fn run() {
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog,get_file_path,generate_key,get_resulting_dir,final_encryption])
+        .invoke_handler(tauri::generate_handler![open_in_explorer,open_file_dialog,open_folder_dialog,get_file_path,generate_key,get_resulting_dir,final_encryption])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -156,4 +159,10 @@ fn open_folder_dialog() -> String {
     // }
     // else {Ok(unfiltered_url)}
     return file_url_string;
+}
+
+#[tauri::command]
+fn open_in_explorer(new_file_path:String) -> Result<(), String> {
+    let _command_execution = Command::new("explorer.exe").args(&["/select,",&new_file_path]).spawn().map_err(|e| format!("Failure: Command , {}",e));
+    Ok(())
 }

@@ -87,6 +87,12 @@
     async function showFileLocation(){
         let newfilePath = desktopDirectory+"\\"+filename;
         console.log(newfilePath);
+        try {
+            await invoke("open_in_explorer" ,{newfilePath: String});
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 </script>
 <div class="relative w-full overflow-hidden text-primary bg-background">
