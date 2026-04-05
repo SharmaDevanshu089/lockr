@@ -31,7 +31,7 @@ pub fn run() {
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog,get_file_path,generate_key])
+        .invoke_handler(tauri::generate_handler![open_file_dialog,open_folder_dialog,get_file_path,generate_key,get_resulting_dir])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -64,7 +64,7 @@ fn generate_key() -> [u8;32]{
 }
 
 #[tauri::command]
-fn get_resulting_directctory() ->PathBuf{
+fn get_resulting_dir() ->PathBuf{
     let resulting_directory = desktop_dir().unwrap();
     resulting_directory
 }

@@ -12,14 +12,15 @@
     let browseButton: HTMLElement;
     let SpinnerInBrowseButton: HTMLElement;
     let heroButton: HTMLElement;
-    let keyValue = "Enter Password to Encrypt";
     let initialMenu = true;
     let modalSelect = false;
     let password ;
     let disabledModalConfirm = true;
-    let passwordArray;
+    let passwordArray: [u8,32];
     let loading = false;
-
+    let loaderState = "Initializing...";
+    let desktopDirectory;
+    let filename;
 
     onMount(() =>
     {
@@ -34,7 +35,7 @@
         try {
             console.log("Opening Invoke");
             fileData = await invoke("open_file_dialog");
-            let filename = fileData.filename;
+            filename = fileData.filename;
             filePath = fileData.filepath;
             console.log("Stopping Visual Cues");
             SpinnerInBrowseButton.style.display="none";
@@ -59,10 +60,18 @@
         disabledModalConfirm = false;
     }
     async function confirmEncryptionModal(){
-        console.log("Confirming Encryption");
+        console.log("Confirming Encryption Directory");
         modalSelect = false;
         loading = true;
-
+        desktopDirectory = await invoke("get_resulting_dir");
+        let encryptionPackage = {
+            resultant_dir: desktopDirectory,
+            password: passwordArray,
+            resultname : filename,
+            filepath : filePath,
+            checked  : checked,
+        }
+        loaderState = "Encrypting";
     }
 </script>
 <div class="relative w-full overflow-hidden text-primary bg-background">
@@ -110,6 +119,7 @@
         {/if}
         {#if loading}
             <Spinner type="orbit" color="rose" />
+            <h1>{loaderState}</h1>
         {/if}
     </div>
 
