@@ -54,6 +54,13 @@ fn open_file_dialog() -> Result<FileDialogData, String> {
     let response:FileDialogData = FileDialogData {filename: file_name, filepath: filepath.clone()};
     return Ok(response);
 }
+#[tauri::command]
+fn generate_key() -> [u8;32]{
+    let mut key_bytes = [0u8; 32];
+    rand::thread_rng().fill_bytes(&mut key_bytes);
+    println!("{:?}",key_bytes.clone());
+    return key_bytes;
+}
 fn encript_file_by_path(path_to_file: PathBuf) {
     let file = fs::read(&path_to_file).unwrap();
     let mut key_bytes = [0u8; 32];
