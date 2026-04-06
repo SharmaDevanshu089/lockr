@@ -31,6 +31,12 @@
         browseButton = document.getElementById("BrowseText");
     });
 
+    async function initiateDecryption() {
+        initialMenu = false;
+        modalSelect = true;
+        disabledModalConfirm = false;
+    }
+
     async function openFileDialog(){
         console.log("Browse Clicked ,Starting visual cues");
         SpinnerInBrowseButton.style.display="unset";
@@ -70,9 +76,28 @@
                     <button on:click={openFileDialog}><Spinner type="dots" id="SpinnerInBrowse" size="5" style="display: none" /><text id="BrowseText" style="display:unset">Browse</text></button>
                 </div>
             </div>
-            <button id="HeroButton" class="winui-button" on:click={initiatekeyAccusition} disabled>
+            <button id="HeroButton" class="winui-button" on:click={initiateDecryption} disabled>
                 Start Decryption
             </button>
+        {/if}
+        {#if modalSelect}
+            <div class="dialog-overlay">
+                <div class="dialog">
+                    <h2 class="dialog-title">Enter the Encryption Key</h2>
+                    <p class="dialog-warning">
+                        ⚠ Please Enter the key which was entered or generated during the time of encryption.<br> Without this key you cannot Decrypt the file.
+                    </p>
+                    <input
+                            type="text"
+                            bind:value={password}
+                            class="dialog-input"
+                            disabled=false
+                    />
+                    <div class="dialog-actions">
+                        <button class="dialog-button" on:click={confirmEncryptionModal} disabled={disabledModalConfirm}>OK</button>
+                    </div>
+                </div>
+            </div>
         {/if}
     </div>
 </div>
