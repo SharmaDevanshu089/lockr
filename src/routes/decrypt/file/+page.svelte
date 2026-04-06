@@ -70,8 +70,8 @@
                     <button on:click={openFileDialog}><Spinner type="dots" id="SpinnerInBrowse" size="5" style="display: none" /><text id="BrowseText" style="display:unset">Browse</text></button>
                 </div>
             </div>
-            <button id="HeroButton" class="winui-button" on:click={initiateEncryption} disabled>
-                Start Encryption
+            <button id="HeroButton" class="winui-button" on:click={initiatekeyAccusition} disabled>
+                Start Decryption
             </button>
         {/if}
     </div>
