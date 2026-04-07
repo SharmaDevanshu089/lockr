@@ -91,7 +91,6 @@
                             type="text"
                             bind:value={password}
                             class="dialog-input"
-                            disabled=false
                     />
                     <div class="dialog-actions">
                         <button class="dialog-button" on:click={confirmEncryptionModal} disabled={disabledModalConfirm}>OK</button>
