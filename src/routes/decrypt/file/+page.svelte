@@ -1,4 +1,3 @@
-//For empty commit
 <script lang="ts">
     import { invoke } from '@tauri-apps/api/core';
     import { Breadcrumb, BreadcrumbItem } from "flowbite-svelte";
