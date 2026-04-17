@@ -23,6 +23,7 @@
     let desktopDirectory;
     let filename;
     let sucessState = false;
+    let nounce : [u8,12];
 
     onMount(() =>
     {
@@ -60,7 +61,14 @@
     }
     async function confirmDecryptionModal(){
         console.log("Decryption Modal is being closed");
-        
+        console.log(password);
+        passwordArray = password.split(",");
+        console.log(passwordArray);
+        modalSelect = false;
+        loaderState = "Reading the file";
+        loading = true;
+        nounce = await invoke("read_nounce_bytes",{filePath});
+        console.log(nounce);
     }
 </script>
 
@@ -101,6 +109,10 @@
                     </div>
                 </div>
             </div>
+        {/if}
+        {#if loading}
+            <Spinner type="orbit" color="rose" />
+            <h1>{loaderState}</h1>
         {/if}
     </div>
 </div>

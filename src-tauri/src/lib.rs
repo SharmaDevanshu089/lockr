@@ -1,5 +1,6 @@
 use std::fmt::format;
 use std::fs;
+use std::fs::File;
 use std::io::{Error, Write};
 use std::io::BufRead;
 use std::io::BufReader;
@@ -48,7 +49,7 @@ pub fn run() {
             Ok(())
         })
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![open_in_explorer,open_file_dialog,open_folder_dialog,get_file_path,generate_key,get_resulting_dir,final_encryption])
+        .invoke_handler(tauri::generate_handler![read_nounce_bytes,open_in_explorer,open_file_dialog,open_folder_dialog,get_file_path,generate_key,get_resulting_dir,final_encryption])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -166,4 +167,13 @@ fn open_in_explorer(new_file_path:String) -> Result<(), String> {
     println!("New File Path: {}", new_file_path);
     let _command_execution = Command::new("explorer.exe").args(&["/select,",&new_file_path]).spawn().map_err(|e| format!("Failure: Command , {}",e));
     Ok(())
+}
+
+#[tauri::command]
+fn read_nounce_bytes(file_path_to_read:PathBuf) -> Result<[u8;12], String> {
+    let mut nounce_bytes = [0u8; 12];
+    println!("Reading bytes");
+    let mut file_reader = File::open(file_path_to_read).map_err(|e|"File Open Error")?;
+     file_reader.read_exact(&mut nounce_bytes).map_err(|e|"File Read Error")?;
+    Ok(nounce_bytes)
 }
