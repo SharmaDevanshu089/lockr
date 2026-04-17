@@ -58,6 +58,10 @@
             browseButton.style.display="unset";
         }
     }
+    async function confirmDecryptionModal(){
+        console.log("Decryption Modal is being closed");
+        
+    }
 </script>
 
 
@@ -93,7 +97,7 @@
                             class="dialog-input"
                     />
                     <div class="dialog-actions">
-                        <button class="dialog-button" on:click={confirmEncryptionModal} disabled={disabledModalConfirm}>OK</button>
+                        <button class="dialog-button" on:click={confirmDecryptionModal} disabled={disabledModalConfirm}>OK</button>
                     </div>
                 </div>
             </div>
