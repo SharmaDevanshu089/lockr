@@ -93,6 +93,7 @@ fn final_encryption(responsepackage:EncryptionCommandRequestPackage) -> Result<(
     let mut nonce_bytes = [0u8; 12];
     let key_bytes = responsepackage.password;
     rand::thread_rng().fill_bytes(&mut nonce_bytes);
+    println!("{:?}",nonce_bytes.clone());
     let key = Key::<Aes256Gcm>::from_slice(&key_bytes);
     let nonce = Nonce::from_slice(&nonce_bytes);
     let mut path_to_write = responsepackage.resultant_dir.join(responsepackage.resultname);

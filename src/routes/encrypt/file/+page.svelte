@@ -147,6 +147,7 @@
         {#if sucessState}
             <h1>Successfully encrypted</h1>
             <button class="winui-button" on:click={showFileLocation}>Show File Location</button>
+            <a class="winui-button" href="/">Show File Location</a>
         {/if}
     </div>
 
