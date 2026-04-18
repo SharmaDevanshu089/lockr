@@ -69,6 +69,7 @@
         loading = true;
         nounce = await invoke("read_nounce_bytes",{path:filePath});
         console.log(nounce);
+        
     }
 </script>
 
