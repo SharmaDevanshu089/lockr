@@ -67,7 +67,7 @@
         modalSelect = false;
         loaderState = "Reading the file";
         loading = true;
-        nounce = await invoke("read_nounce_bytes",{filePath});
+        nounce = await invoke("read_nounce_bytes",{path:filePath});
         console.log(nounce);
     }
 </script>

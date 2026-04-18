@@ -170,10 +170,10 @@ fn open_in_explorer(new_file_path:String) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn read_nounce_bytes(file_path_to_read:PathBuf) -> Result<[u8;12], String> {
+fn read_nounce_bytes(path:PathBuf) -> Result<[u8;12], String> {
     let mut nounce_bytes = [0u8; 12];
     println!("Reading bytes");
-    let mut file_reader = File::open(file_path_to_read).map_err(|e|"File Open Error")?;
+    let mut file_reader = File::open(path).map_err(|e|"File Open Error")?;
      file_reader.read_exact(&mut nounce_bytes).map_err(|e|"File Read Error")?;
     Ok(nounce_bytes)
 }
