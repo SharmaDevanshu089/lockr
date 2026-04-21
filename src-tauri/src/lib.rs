@@ -41,8 +41,6 @@ pub fn run() {
 
             #[cfg(target_os = "windows")]
             {
-                // The second parameter is an optional RGBA tint color: (R, G, B, Alpha)
-                // Adjust these values to match your app's theme
                 apply_mica(&window,None).expect("Failed to apply acrylic effect");
             }
 
