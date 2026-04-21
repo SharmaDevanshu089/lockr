@@ -6,6 +6,7 @@
     import {gsap} from "gsap";
     import {onMount} from "svelte";
 
+    const DEBUG = true;
 
     let filePath = "File Not Selected";
     let fileData;
@@ -25,32 +26,64 @@
     let sucessState = false;
     let nounce : [u8,12];
 
+    if (DEBUG) {
+        console.log("variable filePath:", filePath);
+        console.log("variable checked:", checked);
+        console.log("variable initialMenu:", initialMenu);
+        console.log("variable modalSelect:", modalSelect);
+        console.log("variable disabledModalConfirm:", disabledModalConfirm);
+        console.log("variable loading:", loading);
+        console.log("variable loaderState:", loaderState);
+        console.log("variable sucessState:", sucessState);
+    }
+
     onMount(() =>
     {
         heroButton = document.getElementById("HeroButton");
         SpinnerInBrowseButton = document.getElementById("SpinnerInBrowse");
         browseButton = document.getElementById("BrowseText");
+        if (DEBUG) {
+            console.log("variable heroButton:", heroButton);
+            console.log("variable SpinnerInBrowseButton:", SpinnerInBrowseButton);
+            console.log("variable browseButton:", browseButton);
+        }
     });
 
     async function initiateDecryption() {
+        if (DEBUG) {
+            console.log("initiateDecryption is loading");
+        }
         initialMenu = false;
         modalSelect = true;
         disabledModalConfirm = false;
+        if (DEBUG) {
+            console.log("variable initialMenu (updated):", initialMenu);
+            console.log("variable modalSelect (updated):", modalSelect);
+            console.log("variable disabledModalConfirm (updated):", disabledModalConfirm);
+        }
     }
 
     async function openFileDialog(){
+        if (DEBUG) {
+            console.log("openFileDialog is loading");
+        }
         console.log("Browse Clicked ,Starting visual cues");
         SpinnerInBrowseButton.style.display="unset";
         browseButton.style.display="none";
         try {
             console.log("Opening Invoke");
+            if (DEBUG) console.log("invoke open_file_dialog");
             fileData = await invoke("open_file_dialog");
+            if (DEBUG) console.log("variable fileData:", fileData);
             filename = fileData.filename;
+            if (DEBUG) console.log("variable filename:", filename);
             filePath = fileData.filepath;
+            if (DEBUG) console.log("variable filePath:", filePath);
             console.log("Stopping Visual Cues");
             SpinnerInBrowseButton.style.display="none";
             browseButton.style.display="unset";
             heroButton.disabled = false;
+            if (DEBUG) console.log("variable heroButton.disabled (updated):", heroButton.disabled);
         }
         catch (error) {
             console.log("Error Condition is ran");
@@ -60,16 +93,27 @@
         }
     }
     async function confirmDecryptionModal(){
+        if (DEBUG) {
+            console.log("confirmDecryptionModal is loading");
+        }
         console.log("Decryption Modal is being closed");
         console.log(password);
         passwordArray = password.split(",");
+        if (DEBUG) console.log("variable passwordArray:", passwordArray);
         console.log(passwordArray);
         modalSelect = false;
         loaderState = "Reading the file";
         loading = true;
+        if (DEBUG) {
+            console.log("variable modalSelect (updated):", modalSelect);
+            console.log("variable loaderState (updated):", loaderState);
+            console.log("variable loading (updated):", loading);
+        }
+        if (DEBUG) console.log("invoke read_nounce_bytes");
         nounce = await invoke("read_nounce_bytes",{path:filePath});
+        if (DEBUG) console.log("variable nounce:", nounce);
         console.log(nounce);
-        
+        if (DEBUG) console.log("confirmDecryptionModal finished");
     }
 </script>
 

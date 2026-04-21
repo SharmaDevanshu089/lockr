@@ -5,11 +5,18 @@
     import { Heading } from "flowbite-svelte";
     import { GradientButton } from "flowbite-svelte";
     import {gsap} from "gsap";
+    const DEBUG = true;
     function handleFileClick() {
+        if (DEBUG) {
+            console.log("handleFileClick is loading");
+        }
         console.log('File clicked!');
         goto('/decrypt/file');
     }
     function handleFolderClick() {
+        if (DEBUG) {
+            console.log("handleFolderClick is loading");
+        }
         console.log('Folder clicked');
         goto('/decrypt/folder');
     }

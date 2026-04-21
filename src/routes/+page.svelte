@@ -6,11 +6,19 @@
   import { GradientButton } from "flowbite-svelte";
   import {gsap} from "gsap";
 
+  const DEBUG = true;
+
   function handleEncryptClick() {
+    if (DEBUG) {
+      console.log("handleEncryptClick is loading");
+    }
     console.log('Encrypt clicked!');
     goto('/encrypt');
   }
   function handleDecryptClick() {
+    if (DEBUG) {
+      console.log("handleDecryptClick is loading");
+    }
     console.log('Encrypt clicked!');
     goto('/decrypt');
   }

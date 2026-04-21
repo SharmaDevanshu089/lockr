@@ -11,27 +11,52 @@
   import { ContextMenu } from "bits-ui";
   import { Bug, Folder, User } from "lucide-svelte"; // lucide icons
 
+  const DEBUG = true;
   let { children } = $props();
 
   async function openGithub() {
+    if (DEBUG) {
+      console.log("openGithub is loading");
+    }
     await openUrl("https://github.com/SharmaDevanshu089");
   }
 
   function addFocus() {
+    if (DEBUG) {
+      console.log("addFocus is loading");
+    }
     const el = document.getElementById("devanshu-span");
+    if (DEBUG) {
+      console.log("variable el:", el);
+    }
     el?.classList.remove('text-muted-foreground');
     el?.classList.add('shadow-xl', 'text-primary'); 
   }
 
   function removeFocus() {
+    if (DEBUG) {
+      console.log("removeFocus is loading");
+    }
     const el = document.getElementById("devanshu-span");
+    if (DEBUG) {
+      console.log("variable el:", el);
+    }
     el?.classList.remove('shadow-xl', 'text-primary');
     el?.classList.add('text-muted-foreground');
   }
 
-  function handleIssues() { openUrl("https://github.com/SharmaDevanshu089/lockr"); }
-  function handleSource() { openUrl("https://github.com/SharmaDevanshu089/lockr/issues");}
-  function handleAbout() { openUrl("https://github.com/SharmaDevanshu089");}
+  function handleIssues() { 
+    if (DEBUG) { console.log("handleIssues is loading"); }
+    openUrl("https://github.com/SharmaDevanshu089/lockr"); 
+  }
+  function handleSource() { 
+    if (DEBUG) { console.log("handleSource is loading"); }
+    openUrl("https://github.com/SharmaDevanshu089/lockr/issues");
+  }
+  function handleAbout() { 
+    if (DEBUG) { console.log("handleAbout is loading"); }
+    openUrl("https://github.com/SharmaDevanshu089");
+  }
 </script>
 
 <Titlebar />

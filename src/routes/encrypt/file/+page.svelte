@@ -6,6 +6,8 @@
     import {gsap} from "gsap";
     import {onMount} from "svelte";
 
+    const DEBUG = true;
+
     let filePath = "File Not Selected";
     let fileData;
     let checked = false;
@@ -23,21 +25,44 @@
     let filename;
     let sucessState = false;
 
+    if (DEBUG) {
+        console.log("variable filePath:", filePath);
+        console.log("variable checked:", checked);
+        console.log("variable initialMenu:", initialMenu);
+        console.log("variable modalSelect:", modalSelect);
+        console.log("variable disabledModalConfirm:", disabledModalConfirm);
+        console.log("variable loading:", loading);
+        console.log("variable loaderState:", loaderState);
+        console.log("variable sucessState:", sucessState);
+    }
+
     onMount(() =>
     {
         heroButton = document.getElementById("HeroButton");
         SpinnerInBrowseButton = document.getElementById("SpinnerInBrowse");
         browseButton = document.getElementById("BrowseText");
+        if (DEBUG) {
+            console.log("variable heroButton:", heroButton);
+            console.log("variable SpinnerInBrowseButton:", SpinnerInBrowseButton);
+            console.log("variable browseButton:", browseButton);
+        }
     });
     async function openFileDialog(){
+        if (DEBUG) {
+            console.log("openFileDialog is loading");
+        }
         console.log("Browse Clicked ,Starting visual cues");
         SpinnerInBrowseButton.style.display="unset";
         browseButton.style.display="none";
         try {
             console.log("Opening Invoke");
+            if (DEBUG) console.log("invoke open_file_dialog");
             fileData = await invoke("open_file_dialog");
+            if (DEBUG) console.log("variable fileData:", fileData);
             filename = fileData.filename;
+            if (DEBUG) console.log("variable filename:", filename);
             filePath = fileData.filepath;
+            if (DEBUG) console.log("variable filePath:", filePath);
             console.log("Stopping Visual Cues");
             SpinnerInBrowseButton.style.display="none";
             browseButton.style.display="unset";
@@ -51,20 +76,40 @@
         }
     }
     async function initiateEncryption(){
+        if (DEBUG) {
+            console.log("initiateEncryption is loading");
+        }
         console.log("Initiating Encryption");
         initialMenu = false;
         modalSelect = true;
+        if (DEBUG) {
+            console.log("variable initialMenu (updated):", initialMenu);
+            console.log("variable modalSelect (updated):", modalSelect);
+        }
+        if (DEBUG) console.log("invoke generate_key");
         passwordArray = await invoke("generate_key");
+        if (DEBUG) console.log("variable passwordArray:", passwordArray);
         console.log(passwordArray);
         password = passwordArray.toString();
+        if (DEBUG) console.log("variable password:", password);
         console.log(password);
         disabledModalConfirm = false;
+        if (DEBUG) console.log("variable disabledModalConfirm (updated):", disabledModalConfirm);
     }
     async function confirmEncryptionModal(){
+        if (DEBUG) {
+            console.log("confirmEncryptionModal is loading");
+        }
         console.log("Confirming Encryption Directory");
         modalSelect = false;
         loading = true;
+        if (DEBUG) {
+            console.log("variable modalSelect (updated):", modalSelect);
+            console.log("variable loading (updated):", loading);
+        }
+        if (DEBUG) console.log("invoke get_resulting_dir");
         desktopDirectory = await invoke("get_resulting_dir");
+        if (DEBUG) console.log("variable desktopDirectory:", desktopDirectory);
         let encryptionPackageJS = {
             resultant_dir: desktopDirectory,
             password: passwordArray,
@@ -72,11 +117,15 @@
             filepath : filePath,
             checked  : checked,
         }
+        if (DEBUG) console.log("variable encryptionPackageJS:", encryptionPackageJS);
         loaderState = "Encrypting";
+        if (DEBUG) console.log("variable loaderState (updated):", loaderState);
         try {
+            if (DEBUG) console.log("invoke final_encryption");
             await invoke("final_encryption", {responsepackage:encryptionPackageJS});
             console.log("Finished Encryption");
             sucessState = true;
+            if (DEBUG) console.log("variable sucessState (updated):", sucessState);
         }
         catch (error) {
             console.log(error);
@@ -85,8 +134,13 @@
         loading = false;
     }
     async function showFileLocation() {
+        if (DEBUG) {
+            console.log("showFileLocation is loading");
+        }
         let newFilename = filename.replace(/\.[^.]+$/, ".aes");
+        if (DEBUG) console.log("variable newFilename:", newFilename);
         let new_file_path = desktopDirectory + "\\" + newFilename;
+        if (DEBUG) console.log("variable new_file_path:", new_file_path);
 
         console.log("Path being sent to Rust:", new_file_path);
         try {
