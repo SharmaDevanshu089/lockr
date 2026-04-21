@@ -26,6 +26,12 @@ struct FileDialogData {
 }
 
 #[derive(Deserialize, Debug)]
+struct SavingDialogData {
+    window_title: String,
+    file_extension: String,
+    file_type_name,
+}
+#[derive(Deserialize, Debug)]
 struct EncryptionCommandRequestPackage {
     resultant_dir: PathBuf,
     password: [u8; 32],
@@ -375,4 +381,26 @@ fn read_nounce_bytes(path: PathBuf) -> Result<[u8; 12], String> {
         println!("read_nounce_bytes returns Ok(nounce_bytes)");
     }
     Ok(nounce_bytes)
+}
+
+#[tauri::command]
+fn open_saving_prompt(output_case_type: String) -> Result<String, String> {
+    //Case 1 :For Opening Save as for Saving as Encription target location "type_encryption_save"
+    //Case 2: For opening save as for Saving Decryption target location "type_decryption_save
+    let window_title :String;
+    let file_type: String;
+    if output_case_type = &"type_encryption_save" {
+        println!("open_saving_prompt is loading");
+        window_title = "Where to Save Encrypted file";
+        file_type = "AES Encryption File";
+    }
+    else if output_case_type = &"type_decryption_save" {
+        println!("open_saving_prompt for decryption is loading");
+        window_title = "Where to Save Decrypted file";
+        file_type = "AES Encryption File";
+    }
+    else {
+        return Err(format!("Unknown output type: {}", output_case_type));
+    }
+    let file_path_for_saving = FileDialog::new().set_title(window_title).add_filter(file_type, &["saving"]);
 }
