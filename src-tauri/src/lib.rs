@@ -184,7 +184,7 @@ fn final_encryption(responsepackage: EncryptionCommandRequestPackage) -> Result<
         println!("variable path_to_write: {:?}", path_to_write);
         println!("variable path_to_read: {:?}", path_to_read);
     }
-    path_to_write.set_extension("aes");
+    path_to_write.add_extension("aes");
     if DEBUG {
         println!("variable path_to_write (updated): {:?}", path_to_write);
     }
