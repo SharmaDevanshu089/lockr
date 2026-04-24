@@ -5,18 +5,13 @@ use dirs::desktop_dir;
 use rand::RngCore;
 use rfd::FileDialog;
 use serde::{Deserialize, Serialize};
-use std::fmt::format;
 use std::fs;
 use std::fs::File;
-use std::io::BufRead;
-use std::io::BufReader;
-use std::io::BufWriter;
 use std::io::Read;
-use std::io::{Error, Write};
+use std::io::Write;
 use std::path::PathBuf;
 use std::process::Command;
 use tauri::Manager;
-use tokio::task::spawn_blocking;
 use window_vibrancy::apply_mica;
 
 #[derive(Serialize)]
@@ -29,7 +24,7 @@ struct FileDialogData {
 struct SavingDialogData {
     window_title: String,
     file_extension: String,
-    file_type_name,
+    file_type_name: String,
 }
 #[derive(Deserialize, Debug)]
 struct EncryptionCommandRequestPackage {
@@ -65,7 +60,8 @@ pub fn run() {
             get_file_path,
             generate_key,
             get_resulting_dir,
-            final_encryption
+            final_encryption,
+            final_decryption
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -159,6 +155,7 @@ fn get_resulting_dir() -> PathBuf {
 }
 
 #[tauri::command]
+#[allow(deprecated)]
 fn final_encryption(responsepackage: EncryptionCommandRequestPackage) -> Result<(), String> {
     if DEBUG {
         println!("final_encryption is loading");
@@ -185,7 +182,7 @@ fn final_encryption(responsepackage: EncryptionCommandRequestPackage) -> Result<
     let mut path_to_write = responsepackage
         .resultant_dir
         .join(responsepackage.resultname);
-    let mut path_to_read = responsepackage.filepath;
+    let path_to_read = responsepackage.filepath;
     if DEBUG {
         println!("variable path_to_write: {:?}", path_to_write);
         println!("variable path_to_read: {:?}", path_to_read);
@@ -194,9 +191,9 @@ fn final_encryption(responsepackage: EncryptionCommandRequestPackage) -> Result<
     if DEBUG {
         println!("variable path_to_write (updated): {:?}", path_to_write);
     }
-    let mut file_to_write =
+    let file_to_write =
         fs::File::create(&path_to_write).map_err(|e| format!("File Creation Error{}", e))?;
-    let mut file_to_read =
+    let file_to_read =
         fs::File::open(&path_to_read).map_err(|e| format!("File Opening Error{}", e))?;
     if DEBUG {
         println!("variable file_to_write: (File handle)");
@@ -243,6 +240,7 @@ fn final_encryption(responsepackage: EncryptionCommandRequestPackage) -> Result<
     Ok(())
 }
 
+#[allow(deprecated)]
 fn encript_file_by_path(path_to_file: PathBuf) {
     if DEBUG {
         println!("encript_file_by_path is loading");
@@ -291,7 +289,7 @@ fn encript_file_by_path(path_to_file: PathBuf) {
     let mut output = Vec::new();
     output.extend_from_slice(&nonce_bytes);
     output.extend_from_slice(&ciphertext);
-    let mut path_to_write = &mut path_to_file.clone();
+    let mut path_to_write = path_to_file.clone();
     path_to_write.set_extension("bin");
     let path_to_write_string = path_to_write.to_string_lossy().into_owned();
     if DEBUG {
@@ -369,13 +367,13 @@ fn read_nounce_bytes(path: PathBuf) -> Result<[u8; 12], String> {
         println!("variable nounce_bytes: {:?}", nounce_bytes);
     }
     println!("Reading bytes");
-    let mut file_reader = File::open(path).map_err(|e| "File Open Error")?;
+    let mut file_reader = File::open(path).map_err(|_e| "File Open Error")?;
     if DEBUG {
         println!("variable file_reader: (handle)");
     }
     file_reader
         .read_exact(&mut nounce_bytes)
-        .map_err(|e| "File Read Error")?;
+        .map_err(|_e| "File Read Error")?;
     if DEBUG {
         println!("variable nounce_bytes (updated): {:?}", nounce_bytes);
         println!("read_nounce_bytes returns Ok(nounce_bytes)");
@@ -387,20 +385,124 @@ fn read_nounce_bytes(path: PathBuf) -> Result<[u8; 12], String> {
 fn open_saving_prompt(output_case_type: String) -> Result<String, String> {
     //Case 1 :For Opening Save as for Saving as Encription target location "type_encryption_save"
     //Case 2: For opening save as for Saving Decryption target location "type_decryption_save
-    let window_title :String;
+    let window_title: String;
     let file_type: String;
-    if output_case_type = &"type_encryption_save" {
+    if output_case_type == "type_encryption_save" {
         println!("open_saving_prompt is loading");
-        window_title = "Where to Save Encrypted file";
-        file_type = "AES Encryption File";
-    }
-    else if output_case_type = &"type_decryption_save" {
+        window_title = "Where to Save Encrypted file".to_string();
+        file_type = "AES Encryption File".to_string();
+    } else if output_case_type == "type_decryption_save" {
         println!("open_saving_prompt for decryption is loading");
-        window_title = "Where to Save Decrypted file";
-        file_type = "AES Encryption File";
-    }
-    else {
+        window_title = "Where to Save Decrypted file".to_string();
+        file_type = "AES Encryption File".to_string();
+    } else {
         return Err(format!("Unknown output type: {}", output_case_type));
     }
-    let file_path_for_saving = FileDialog::new().set_title(window_title).add_filter(file_type, &["saving"]);
+    let file_path_for_saving = FileDialog::new()
+        .set_title(&window_title)
+        .add_filter(&file_type, &["saving"])
+        .save_file();
+
+    match file_path_for_saving {
+        Some(path) => Ok(path.to_string_lossy().into_owned()),
+        None => Err("No file selected".to_string()),
+    }
+}
+
+#[tauri::command]
+#[allow(deprecated)]
+fn final_decryption(responsepackage: EncryptionCommandRequestPackage) -> Result<(), String> {
+    if DEBUG {
+        println!("final_decryption is loading");
+        println!(
+            "variable responsepackage is initialsie with {:?}",
+            responsepackage
+        );
+    }
+    const BUFFER_SIZE: usize = 4;
+    let key_bytes = responsepackage.password;
+    if DEBUG {
+        println!("variable key_bytes: {:?}", key_bytes);
+    }
+    let key = Key::<Aes256Gcm>::from_slice(&key_bytes);
+    if DEBUG {
+        println!("variable key: {:?}", key);
+    }
+    let path_to_write_base = responsepackage
+        .resultant_dir
+        .join(responsepackage.resultname);
+    // Remove the .aes extension if present, otherwise no change
+    let mut path_to_write = path_to_write_base.clone();
+    path_to_write.set_extension("");
+
+    let path_to_read = responsepackage.filepath;
+    if DEBUG {
+        println!("variable path_to_write: {:?}", path_to_write);
+        println!("variable path_to_read: {:?}", path_to_read);
+    }
+
+    let file_to_read =
+        fs::File::open(&path_to_read).map_err(|e| format!("File Opening Error{}", e))?;
+    let file_to_write =
+        fs::File::create(&path_to_write).map_err(|e| format!("File Creation Error{}", e))?;
+    if DEBUG {
+        println!("variable file_to_write: (File handle)");
+        println!("variable file_to_read: (File handle)");
+    }
+    let mut BufferReader = std::io::BufReader::new(file_to_read);
+    let mut BufferWriter = std::io::BufWriter::new(file_to_write);
+    if DEBUG {
+        println!("variable BufferReader: (handle)");
+        println!("variable BufferWriter: (handle)");
+    }
+
+    // Read the nonce first
+    let mut nonce_bytes = [0u8; 12];
+    BufferReader
+        .read_exact(&mut nonce_bytes)
+        .map_err(|e| format!("File Read Error (Nonce){}", e))?;
+    let nonce = Nonce::from_slice(&nonce_bytes);
+    if DEBUG {
+        println!("variable nonce_bytes: {:?}", nonce_bytes);
+        println!("variable nonce: {:?}", nonce);
+    }
+
+    // buffer size is 4096 (original buffer) + 16 (tag size for AES-GCM) = 4112 bytes
+    let mut buffer = [0u8; (BUFFER_SIZE * 1024) + 16];
+    let cipher = Aes256Gcm::new(&key);
+    if DEBUG {
+        println!("variable buffer size: {:?}", buffer.len());
+        println!("variable cipher: (created)");
+    }
+
+    loop {
+        // Read in chunks of 4112 bytes precisely to recreate the exact ciphertext blocks produced by encryption
+        let mut n = 0;
+        while n < buffer.len() {
+            match BufferReader.read(&mut buffer[n..]) {
+                Ok(0) => break,
+                Ok(read_bytes) => n += read_bytes,
+                Err(e) => return Err(format!("File Read Error{}", e)),
+            }
+        }
+        if DEBUG {
+            println!("variable n: {:?}", n);
+        }
+        if n == 0 {
+            break;
+        }
+        let plaintext = cipher
+            .decrypt(nonce, &buffer[..n])
+            .map_err(|e| format!("File Decryption Error{}", e))?;
+        if DEBUG {
+            println!("variable plaintext length: {:?}", plaintext.len());
+        }
+        BufferWriter
+            .write_all(&plaintext)
+            .map_err(|e| format!("File Write Error{}", e))?;
+    }
+    if DEBUG {
+        println!("final_decryption returns Ok(())");
+    }
+    Ok(())
 }

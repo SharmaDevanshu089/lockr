@@ -98,7 +98,10 @@
         }
         console.log("Decryption Modal is being closed");
         console.log(password);
-        passwordArray = password.split(",");
+        
+        let stringArray = password.split(",");
+        passwordArray = stringArray.map(Number);
+        
         if (DEBUG) console.log("variable passwordArray:", passwordArray);
         console.log(passwordArray);
         modalSelect = false;
@@ -113,7 +116,57 @@
         nounce = await invoke("read_nounce_bytes",{path:filePath});
         if (DEBUG) console.log("variable nounce:", nounce);
         console.log(nounce);
-        if (DEBUG) console.log("confirmDecryptionModal finished");
+        
+        if (DEBUG) console.log("invoke get_resulting_dir");
+        desktopDirectory = await invoke("get_resulting_dir");
+        if (DEBUG) console.log("variable desktopDirectory:", desktopDirectory);
+        
+        let decryptionPackageJS = {
+            resultant_dir: desktopDirectory,
+            password: passwordArray,
+            resultname : filename,
+            filepath : filePath,
+            checked  : checked,
+        }
+        if (DEBUG) console.log("variable decryptionPackageJS:", decryptionPackageJS);
+        
+        loaderState = "Decrypting";
+        if (DEBUG) console.log("variable loaderState (updated):", loaderState);
+        
+        try {
+            if (DEBUG) console.log("invoke final_decryption");
+            await invoke("final_decryption", {responsepackage: decryptionPackageJS});
+            console.log("Finished Decryption");
+            sucessState = true;
+            if (DEBUG) console.log("variable sucessState (updated):", sucessState);
+        }
+        catch (error) {
+            console.log(error);
+            //TODO: Create a Proper handle for stopping the decryption and popup
+        }
+        loading = false;
+    }
+
+    async function showFileLocation() {
+        if (DEBUG) {
+            console.log("showFileLocation is loading");
+        }
+        // Remove .aes if present. Wait, filename has .aes if it's an encrypted file
+        let newFilename = filename;
+        if (newFilename.endsWith('.aes')) {
+            newFilename = newFilename.slice(0, -4);
+        }
+        if (DEBUG) console.log("variable newFilename:", newFilename);
+        let new_file_path = desktopDirectory + "\\" + newFilename;
+        if (DEBUG) console.log("variable new_file_path:", new_file_path);
+
+        console.log("Path being sent to Rust:", new_file_path);
+        try {
+            await invoke("open_in_explorer" , { newFilePath: new_file_path });
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 </script>
 
@@ -158,6 +211,11 @@
         {#if loading}
             <Spinner type="orbit" color="rose" />
             <h1>{loaderState}</h1>
+        {/if}
+        {#if sucessState}
+            <h1>Successfully decrypted</h1>
+            <button class="winui-button" on:click={showFileLocation}>Show File Location</button>
+            <a class="winui-button" href="/">Home</a>
         {/if}
     </div>
 </div>
